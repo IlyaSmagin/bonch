@@ -1,166 +1,171 @@
-<!DOCTYPE html>
+
+<!DOCTYPE html> 
 <html>
-
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Page Title</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script type="text/javascript" src="https://cabinet.sut.ru/scripts/jquery.js"></script>
-</head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>  
+    <META NAME="ROBOTS" CONTENT="NOINDEX,NOFOLLOW"> 
+    <link rel="stylesheet" type="text/css" href="https://cabinet.sut.ru/css/style.css"/>  
+    <link href="https://cabinet.sut.ru/css/form.css" rel="stylesheet" type="text/css" />  
+    <link media="all" type="text/css" rel="stylesheet" href="https://cabinet.sut.ru/css/table.css">  
+    <script type="text/javascript" src="https://cabinet.sut.ru/scripts/jquery.js"></script>                     
+    <title> СПбГУТ - Расписание</title>       
+</head> 
+<body id="body" style="background:#fff"> 
+<div id="rightpanel" style="background:#fff;width:auto;">
+<form name="frm" method="post" style="text-align: center;width:99%;">   
+Учебный год <select id="schet"  name="schet" 
+ onchange="change_usl();" disabled    ><option value=0 >..</option> 
+               <option value=205.0304/1 >1 семестр 03/04 уч.г.</option> 
+               <option value=205.0405/1 >1 семестр 04/05 уч.г.</option> 
+               <option value=205.0506/1 >1 семестр 05/06 уч.г.</option> 
+               <option value=205.0607/1 >1 семестр 06/07 уч.г.</option> 
+               <option value=205.0708/1 >1 семестр 07/08 уч.г.</option> 
+               <option value=205.0809/1 >1 семестр 08/09 уч.г.</option> 
+               <option value=205.0910/1 >1 семестр 09/10 уч.г.</option> 
+               <option value=205.1011/1 >1 семестр 10/11 уч.г.</option> 
+               <option value=205.1112/1 >1 семестр 11/12 уч.г.</option> 
+               <option value=205.1213/1 >1 семестр 12/13 уч.г.</option> 
+               <option value=205.1314/1 >1 семестр 13/14 уч.г.</option> 
+               <option value=205.1415/1 >1 семестр 14/15 уч.г.</option> 
+               <option value=205.1516/1 >1 семестр 15/16 уч.г.</option> 
+               <option value=205.1617/1 >1 семестр 16/17 уч.г.</option> 
+               <option value=205.1718/1 >1 семестр 17/18 уч.г.</option> 
+               <option value=205.1819/1  selected>1 семестр 18/19 уч.г.</option> 
+               <option value=205.1920/1 >1 семестр 19/20 уч.г.</option> 
+               <option value=205.2021/1 >1 семестр 20/21 уч.г.</option> 
+               <option value=205.2122/1 >1 семестр 21/22 уч.г.</option> 
+               <option value=205.2223/1 >1 семестр 22/23 уч.г.</option> 
+               <option value=205.2324/1 >1 семестр 23/24 уч.г.</option> 
+               <option value=205.0304/2 >2 семестр 03/04 уч.г.</option> 
+               <option value=205.0405/2 >2 семестр 04/05 уч.г.</option> 
+               <option value=205.0506/2 >2 семестр 05/06 уч.г.</option> 
+               <option value=205.0607/2 >2 семестр 06/07 уч.г.</option> 
+               <option value=205.0708/2 >2 семестр 07/08 уч.г.</option> 
+               <option value=205.0809/2 >2 семестр 08/09 уч.г.</option> 
+               <option value=205.0910/2 >2 семестр 09/10 уч.г.</option> 
+               <option value=205.1011/2 >2 семестр 10/11 уч.г.</option> 
+               <option value=205.1112/2 >2 семестр 11/12 уч.г.</option> 
+               <option value=205.1213/2 >2 семестр 12/13 уч.г.</option> 
+               <option value=205.1314/2 >2 семестр 13/14 уч.г.</option> 
+               <option value=205.1415/2 >2 семестр 14/15 уч.г.</option> 
+               <option value=205.1516/2 >2 семестр 15/16 уч.г.</option> 
+               <option value=205.1617/2 >2 семестр 16/17 уч.г.</option> 
+               <option value=205.1718/2 >2 семестр 17/18 уч.г.</option> 
+               <option value=205.1819/2 >2 семестр 18/19 уч.г.</option> 
+               <option value=205.1920/2 >2 семестр 19/20 уч.г.</option> 
+               <option value=205.2021/2 >2 семестр 20/21 уч.г.</option> 
+               <option value=205.2122/2 >2 семестр 21/22 уч.г.</option> 
+               <option value=205.2223/2 >2 семестр 22/23 уч.г.</option> 
+               <option value=205.2324/2 >2 семестр 23/24 уч.г.</option> 
+               <option value=205.0304 >2003/2004 уч.г.</option> 
+               <option value=205.0405 >2004/2005 уч.г.</option> 
+               <option value=205.0506 >2005/2006 уч.г.</option> 
+               <option value=205.0607 >2006/2007 уч.г.</option> 
+               <option value=205.0708 >2007/2008 уч.г.</option> 
+               <option value=205.0809 >2008/2009 уч.г.</option> 
+               <option value=205.0910 >2009/2010 уч.г.</option> 
+               <option value=205.1011 >2010/2011 уч.г.</option> 
+               <option value=205.1112 >2011/2012 уч.г.</option> 
+               <option value=205.1213 >2012/2013 уч.г.</option> 
+               <option value=205.1314 >2013/2014 уч.г.</option> 
+               <option value=205.1415 >2014/2015 уч.г.</option> 
+               <option value=205.1516 >2015/2016 уч.г.</option> 
+               <option value=205.1617 >2016/2017 уч.г.</option> 
+               <option value=205.1718 >2017/2018 уч.г.</option> 
+               <option value=205.1819 >2018/2019 уч.г.</option> 
+               <option value=205.1920 >2019/2020 уч.г.</option> 
+               <option value=205.2021 >2020/2021 уч.г.</option> 
+               <option value=205.2122 >2021/2022 уч.г.</option> 
+               <option value=205.2223 >2022/2023 уч.г.</option> 
+               <option value=205.2324 >2023/2024 уч.г.</option> 
+        </select><br/><br/> 
+Тип расписания    
+<select id="type_z"  name="type_z" onchange="change_usl();" disabled >
+ <option value=0 >..</option> 
+ <option value=1 selected>Занятия</option> <option value=2>Экзаменационная сессия</option> <option value=3>Факультативы</option> <option value=4>Сессия для заочников</option> <option value=5>Государственная итоговая аттестация</option> <option value=6>Конференции и прочее</option> <option value=8>Занятия для очников (образцовое расписание на 17/18)</option>  </select><br/><br/> 
+    
+Факультет  <select id="faculty"  name="faculty" onchange="change_fac();" 
+ ><option value=0 >..</option> <option value=50007>ГФ</option> <option value=50169>ИВО</option> <option value=50029>ИКСС</option> <option value=56580>ИНО</option> <option value=50005>ИС и Т</option> <option value=50034>Отдел аспирантуры и докторантуры</option> <option value=50010>РТС</option> <option value=50008>ФФП</option> <option value=56610>ЦЭУБИ</option>     </select><br/><br/>   
+Курс 
+ <select id="kurs"  name="kurs" onchange="change_fac();" >
+    <option value=0 >..</option> 
+    <option value=1>1</option> <option value=2>2</option> <option value=3>3</option> <option value=4>4</option> <option value=5>5</option>     </select><br/><br/>
+Группа    <select style="width:130px;" id="group" name="group" onchange="change_group();">
+    <option value=0 >..</option>
+        </select><br/> 
+    <br/><input type="submit" value="Показать" name="ok">
+     
+ <span id="blok_zach" style="display: block"><br/> <input type="submit" value="Показать Расписание зачетов" name="rasp_zach"><br/><br/></span>
+  
+ <span id="blok" style="display: none"> 
+ Расписание занятий для элективных групп. Группа <select style="width:130px;" id="group_el" name="group_el" >
+ <option value=0 >..</option>
+  
+ </select> <input type="submit" value="Показать" name="el_ok"> 
+ </span> 
+          <p>Расписание можно посмотреть в <a target='_BLANK' href='https://cabs.itut.ru/cabinet'>Личном кабинете</a>.</p>  </form>
+  
+ </div></div></div>  
+<script type="text/javascript">  
 
-<body>
-    <div id="rightpanel" style="background:#fff;width:auto;">
-        <form name="frm" method="post" style="text-align: center;width:99%;">
-            Учебный год <select id="schet" name="schet" onchange="change_usl();" disabled>
-                <option value=0>..</option>
-                <option value=205.0304/1>1 семестр 03/04 уч.г.</option> <option value=205.0405/1>1 семестр 04/05 уч.г.</option>
-                    <option value=205.0506/1>1 семестр 05/06 уч.г.</option> <option value=205.0607/1>1 семестр 06/07
-                    уч.г.</option> <option value=205.0708/1>1 семестр 07/08 уч.г.</option> <option value=205.0809/1>1
-                    семестр 08/09 уч.г.</option> <option value=205.0910/1>1 семестр 09/10 уч.г.</option> <option value=205.1011/1>1
-                    семестр 10/11 уч.г.</option> <option value=205.1112/1>1 семестр 11/12 уч.г.</option> <option value=205.1213/1>1
-                    семестр 12/13 уч.г.</option> <option value=205.1314/1>1 семестр 13/14 уч.г.</option> <option value=205.1415/1>1
-                    семестр 14/15 уч.г.</option> <option value=205.1516/1>1 семестр 15/16 уч.г.</option> <option value=205.1617/1>1
-                    семестр 16/17 уч.г.</option> <option value=205.1718/1>1 семестр 17/18 уч.г.</option> <option value=205.1819/1
-                    selected>1 семестр 18/19 уч.г.</option>
-                <option value=205.1920/1>1 семестр 19/20 уч.г.</option> <option value=205.2021/1>1 семестр 20/21 уч.г.</option>
-                    <option value=205.2122/1>1 семестр 21/22 уч.г.</option> <option value=205.2223/1>1 семестр 22/23
-                    уч.г.</option> <option value=205.2324/1>1 семестр 23/24 уч.г.</option> <option value=205.0304/2>2
-                    семестр 03/04 уч.г.</option> <option value=205.0405/2>2 семестр 04/05 уч.г.</option> <option value=205.0506/2>2
-                    семестр 05/06 уч.г.</option> <option value=205.0607/2>2 семестр 06/07 уч.г.</option> <option value=205.0708/2>2
-                    семестр 07/08 уч.г.</option> <option value=205.0809/2>2 семестр 08/09 уч.г.</option> <option value=205.0910/2>2
-                    семестр 09/10 уч.г.</option> <option value=205.1011/2>2 семестр 10/11 уч.г.</option> <option value=205.1112/2>2
-                    семестр 11/12 уч.г.</option> <option value=205.1213/2>2 семестр 12/13 уч.г.</option> <option value=205.1314/2>2
-                    семестр 13/14 уч.г.</option> <option value=205.1415/2>2 семестр 14/15 уч.г.</option> <option value=205.1516/2>2
-                    семестр 15/16 уч.г.</option> <option value=205.1617/2>2 семестр 16/17 уч.г.</option> <option value=205.1718/2>2
-                    семестр 17/18 уч.г.</option> <option value=205.1819/2>2 семестр 18/19 уч.г.</option> <option value=205.1920/2>2
-                    семестр 19/20 уч.г.</option> <option value=205.2021/2>2 семестр 20/21 уч.г.</option> <option value=205.2122/2>2
-                    семестр 21/22 уч.г.</option> <option value=205.2223/2>2 семестр 22/23 уч.г.</option> <option value=205.2324/2>2
-                    семестр 23/24 уч.г.</option> <option value=205.0304>2003/2004 уч.г.</option>
-                <option value=205.0405>2004/2005 уч.г.</option>
-                <option value=205.0506>2005/2006 уч.г.</option>
-                <option value=205.0607>2006/2007 уч.г.</option>
-                <option value=205.0708>2007/2008 уч.г.</option>
-                <option value=205.0809>2008/2009 уч.г.</option>
-                <option value=205.0910>2009/2010 уч.г.</option>
-                <option value=205.1011>2010/2011 уч.г.</option>
-                <option value=205.1112>2011/2012 уч.г.</option>
-                <option value=205.1213>2012/2013 уч.г.</option>
-                <option value=205.1314>2013/2014 уч.г.</option>
-                <option value=205.1415>2014/2015 уч.г.</option>
-                <option value=205.1516>2015/2016 уч.г.</option>
-                <option value=205.1617>2016/2017 уч.г.</option>
-                <option value=205.1718>2017/2018 уч.г.</option>
-                <option value=205.1819>2018/2019 уч.г.</option>
-                <option value=205.1920>2019/2020 уч.г.</option>
-                <option value=205.2021>2020/2021 уч.г.</option>
-                <option value=205.2122>2021/2022 уч.г.</option>
-                <option value=205.2223>2022/2023 уч.г.</option>
-                <option value=205.2324>2023/2024 уч.г.</option>
-            </select><br /><br />
-            Тип расписания
-            <select id="type_z" name="type_z" onchange="change_usl();" disabled>
-                <option value=0>..</option>
-                <option value=1 selected>Занятия</option>
-                <option value=2>Экзаменационная сессия</option>
-                <option value=3>Факультативы</option>
-                <option value=4>Сессия для заочников</option>
-                <option value=5>Государственная итоговая аттестация</option>
-                <option value=6>Конференции и прочее</option>
-                <option value=8>Занятия для очников (образцовое расписание на 17/18)</option>
-            </select><br /><br />
+ function listLoad(data)
+{   document.getElementById('blok').style.display = "none";
+    $("select#group").html('<option value="">...</option>');                   
+    var splits = data.split(';');     
 
-            Факультет <select id="faculty" name="faculty" onchange="change_fac();">
-                <option value=0>..</option>
-                <option value=50007>ГФ</option>
-                <option value=50169>ИВО</option>
-                <option value=50029>ИКСС</option>
-                <option value=56580>ИНО</option>
-                <option value=50005>ИС и Т</option>
-                <option value=50034>Отдел аспирантуры и докторантуры</option>
-                <option value=50010>РТС</option>
-                <option value=50008>ФФП</option>
-                <option value=56610>ЦЭУБИ</option>
-            </select><br /><br />
-            Курс
-            <select id="kurs" name="kurs" onchange="change_fac();">
-                <option value=0>..</option>
-                <option value=1>1</option>
-                <option value=2>2</option>
-                <option value=3>3</option>
-                <option value=4>4</option>
-                <option value=5>5</option>
-            </select><br /><br />
-            Группа <select style="width:130px;" id="group" name="group" onchange="change_group();">
-                <option value=0>..</option>
-            </select><br />
-            <br /><input type="submit" value="Показать" name="ok">
+    for (i=0; i<splits.length-1; i++)
+    {  var prepareLoad = splits[i];
+       var loadData = prepareLoad.split(',');
+       var insertData = '<option value="'+loadData[0]+'">'+loadData[1]+'</option>';
+       $("select#group").append(insertData);                                           
+    }  
+}    
+ function listLoad_fac(data)
+{   $("select#faculty").html('<option value="">...</option>');                   
+    var splits = data.split(';');     
 
-            <span id="blok_zach" style="display: block"><br /> <input type="submit" value="Показать Расписание зачетов"
-                    name="rasp_zach"><br /><br /></span>
-
-            <span id="blok" style="display: none">
-                Расписание занятий для элективных групп. Группа <select style="width:130px;" id="group_el" name="group_el">
-                    <option value=0>..</option>
-
-                </select> <input type="submit" value="Показать" name="el_ok">
-            </span>
-            <p>Расписание можно посмотреть в <a target='_BLANK' href='https://cabs.itut.ru/cabinet'>Личном кабинете</a>.</p>
-        </form>
-
-    </div>
-    </div>
-    </div>
-    <script type="text/javascript">
-
-        function listLoad(data) {
-            document.getElementById('blok').style.display = "none";
-            $("select#group").html('<option value="">...</option>');
-            var splits = data.split(';');
-
-            for (i = 0; i < splits.length - 1; i++) {
-                var prepareLoad = splits[i];
-                var loadData = prepareLoad.split(',');
-                var insertData = '<option value="' + loadData[0] + '">' + loadData[1] + '</option>';
-                $("select#group").append(insertData);
-            }
-        }
-        function listLoad_fac(data) {
-            $("select#faculty").html('<option value="">...</option>');
-            var splits = data.split(';');
-
-            for (i = 0; i < splits.length - 1; i++) {
-                var prepareLoad = splits[i];
-                var loadData = prepareLoad.split(',');
-                var insertData = '<option value="' + loadData[0] + '">' + loadData[1] + '</option>';
-                $("select#faculty").append(insertData);
-            }
-        }
-        function change_usl() {
-            var type = $("#type_z").val(); if (type == 0) return;
-            var schet = $("#schet").val(); if (schet == 0) return;
-            var kurs = $("#kurs").val();
-
-            if (type == 1) document.getElementById('blok_zach').style.display = "block";
-            else document.getElementById('blok_zach').style.display = "none";
-
-            $.post('raspisanie_all_new.php', { choice: 1, type_z: type, schet: schet, kurs: kurs }, listLoad_fac);
-        }
-        function change_group() {
-            var group = $("#group").val();
-            var type = $("#type_z").val();
-            document.getElementById('blok').style.display = "none";
-        }
-        function change_fac() {
-            var type = $("#type_z").val(); if (type == 0) return;
-            var schet = $("#schet").val(); if (schet == 0) return;
-            var kurs = $("#kurs").val();
-            var faculty = $("#faculty").val();
-            if (faculty > 0) $.post('raspisanie_all_new.php', { faculty: faculty, choice: 1, type_z: type, schet: schet, kurs: kurs }, listLoad);
-        }
-    </script>
-
-</body>
-<script src="index.js"></script>
-
+    for (i=0; i<splits.length-1; i++)
+    {  var prepareLoad = splits[i];
+       var loadData = prepareLoad.split(',');
+       var insertData = '<option value="'+loadData[0]+'">'+loadData[1]+'</option>';
+       $("select#faculty").append(insertData);                                           
+    }  
+} 
+ function change_usl()
+ {  var type = $("#type_z").val();    if (type==0) return;
+    var schet = $("#schet").val();    if (schet==0) return;
+    var kurs = $("#kurs").val();    
+    
+    if (type==1) document.getElementById('blok_zach').style.display = "block";
+    else document.getElementById('blok_zach').style.display = "none"; 
+        
+    $.post('raspisanie_all_new.php', {choice:1, type_z: type, schet: schet, kurs:kurs},    listLoad_fac);   
+ }
+ function change_group()
+ {  var group = $("#group").val(); 
+    var type = $("#type_z").val();
+    document.getElementById('blok').style.display = "none";       
+ }
+  function change_fac()
+ {  var type = $("#type_z").val();    if (type==0) return;
+    var schet = $("#schet").val();    if (schet==0) return; 
+    var kurs = $("#kurs").val();
+    var faculty = $("#faculty").val();  
+    if (faculty>0) $.post('raspisanie_all_new.php', {faculty : faculty, choice:1, type_z: type, schet: schet, kurs:kurs},    listLoad);
+ }
+  </script>   
+ </body>  
 </html>
+<style>
+body {
+    background: #fff none repeat scroll 0 0;
+    font-family: Tahoma,Arial,Helvetica;
+    margin: 0;
+    padding: 0;
+} 
+hr {
+    background-image: -moz-linear-gradient(left center , rgba(255, 165, 0, 0.11), rgba(255, 165, 0, 0.75), rgba(255, 165, 0, 0.11));
+    border: 0 none;
+    height: 2px;
+}
+</style>               
