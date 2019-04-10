@@ -1,0 +1,22 @@
+{
+  "short_name": "Расписание",
+  "name": "Bonch Расписание",
+  "description": "Расписание занятий для всех факультетов, курсов и групп в СПбГУТ им. проф. М.А.Бонч-Бруевича",
+  "icons": [
+    {
+      "src": "https://cdn.glitch.com/d153c26f-a95c-4089-a5ac-d5158f721476%2F%D0%A1%D0%BB%D0%BE%D0%B9%2012.png?1552446588938",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "https://cdn.glitch.com/d153c26f-a95c-4089-a5ac-d5158f721476%2F%D0%A1%D0%BB%D0%BE%D0%B9%201.png?1552446598593",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "scope": "/",
+  "start_url": "/",
+  "theme_color": "#256697",
+  "background_color": "#fffcf7",
+  "display": "standalone"
+}
