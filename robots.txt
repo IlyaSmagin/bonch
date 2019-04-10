@@ -1,0 +1,9 @@
+User-agent: Yandex
+Disallow: /schedule
+Disallow: /choose
+
+User-agent: googlebot
+Disallow: /schedule
+Disallow: /choose
+
+Sitemap: https://bonch.glitch.me/sitemap.xml
