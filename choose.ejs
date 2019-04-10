@@ -1,0 +1,38 @@
+<div id="welcome-form" class="modal">
+
+    <div class="form-content">
+        <div class="form-logo">Расписание СПбГУТ</div>
+        <label><div class="fac">Выберите факультет</div>
+            <select id="faculty" name="faculty" onchange="load_group()">
+                <option value=0>Факультет</option>
+                <option value=50007>ГФ</option>
+                <option value=50169>ИВО</option>
+                <option value=50029>ИКСС</option>
+                <option value=56580>ИНО</option>
+                <option value=50005>ИСиТ</option>
+                <option value=50034>Отдел аспирантуры и докторантуры</option>
+                <option value=50010>РТС</option>
+                <option value=50008>ФФП</option>
+                <option value=56610>ЦЭУБИ</option>
+            </select></label>
+        <label>
+<div class="kur">Выберите курс</div>
+            <select id="kurs" name="kurs" onchange="load_group()">
+                <option value=0>Курс</option>
+                <option value=1>1</option>
+                <option value=2>2</option>
+                <option value=3>3</option>
+                <option value=4>4</option>
+                <option value=5>5</option>
+            </select></label>
+        <label>
+<div class="gro">Выберите группу</div>
+        <div class="loader">
+            <select class="short" id="groups" name="groups" onchange="load_schedule()">
+                <option value=0>Группа</option>
+            </select></label>
+         </div>
+        <span role="button" class="close">Закрыть</span>
+    </div>
+  </div>
+</div>
