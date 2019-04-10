@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="theme-color" content="#FFBC42"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://cdn.glitch.com">
+  <link rel="stylesheet" href="style.css">
+  <link type="text/plain" rel="author" href="https://bonch.glitch.me/humans.txt" />
+  <meta name="google-site-verification" content="r2KCK5QQwpdTpmyXO6qlrLMhTb8wxKj_HnwID8zoFRs" />
+  <meta name="yandex-verification" content="827fa197018d314c" />
+  <title>Расписание занятий СПбГУТ</title>
+  <meta name="Description" content="Расписание занятий для всех факультетов, курсов и групп в Санкт-Петербургскоом государственном университете телекоммуникаций им. проф. М.А. Бонч-Бруевича">
+  <link rel="icon" type="image/png" href="https://cdn.glitch.com/d153c26f-a95c-4089-a5ac-d5158f721476%2F%D0%A1%D0%BB%D0%BE%D0%B9%201100.png?1552446743965">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" sizes="152x152" href="https://cdn.glitch.com/d153c26f-a95c-4089-a5ac-d5158f721476%2F%D0%9C%D0%BE%D0%BD%D1%82%D0%B0%D0%B6%D0%BD%D0%B0%D1%8F%20%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C%201.png?1552612458465">
+  <link rel="apple-touch-icon" sizes="167x167" href="https://cdn.glitch.com/d153c26f-a95c-4089-a5ac-d5158f721476%2F%D0%9C%D0%BE%D0%BD%D1%82%D0%B0%D0%B6%D0%BD%D0%B0%D1%8F%20%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C%2012p.png?1552612458661">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://cdn.glitch.com/d153c26f-a95c-4089-a5ac-d5158f721476%2F%D0%9C%D0%BE%D0%BD%D1%82%D0%B0%D0%B6%D0%BD%D0%B0%D1%8F%20%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C%2013p.png?1552612458676">
+</head>
+<body onload="load_schedule()">
+  <header>
+  <div class="date-block">
+    <div id="current-date"></div>
+    <div id="week-number"></div>
+  </div>  
+  <h1>Расписание СПбГУТ</h1>
+  <button id="change-group" tabindex="0" aria-label="Выбрать факультет, курс и группу" onClick="showChoose()">Группа</button>
+  </header>
+  <div class="bg"></div>
+  <% include ../partials/choose %>
+  <nav>
+    <div class="week">
+      <div class="current-week">
+        <div id="thisWeek"></div>
+        <div id="current-start">11.03</div> - <div id="current-end">17.03</div>
+        <div id="indicator"></div>
+    </div>
+      <div class="pagination">
+      <div class="but" tabindex="0" onClick="changeWeek(-1)">Пред.</div>
+      <div class="but" tabindex="0" onClick="changeWeek(1)">След.</div>
+    </div>
+  </div>
+  </nav>
+  <main>
+    <section>
+      <h1>Расписание в СПбГУТ</h1>
+      <p>Выберите Вашу группу нажав на кнопку в правом верхнем углу</p>
+      <p>Мы запоминаем Вашу группу для работы без интернета</p>
+    </section>
+  </main>
+  <footer>
+    <a href="/humans.txt" class="but">О нас</a><a href="/" id="add" class="but"><img src='https://cdn.glitch.com/d153c26f-a95c-4089-a5ac-d5158f721476%2Fround-home-24px.svg?1552589502397'></a><a href="https://cabs.itut.ru/cabinet/" class="but big">Личный кабинет</a><p>Все данные получены из открытых источников.</p>
+  </footer>
+<script src="/client.js"></script>
+<script type="text/javascript" > (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)}; m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)}) (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym"); ym(52294711, "init", { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); </script> <noscript><div><img src="https://mc.yandex.ru/watch/52294711" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<script>if('serviceWorker' in navigator) {navigator.serviceWorker.register('/sw.js');}</script>
+</body>
+</html>
