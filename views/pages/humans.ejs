@@ -11,7 +11,7 @@
   <link rel="apple-touch-icon" sizes="152x152" href="https://cdn.glitch.com/d153c26f-a95c-4089-a5ac-d5158f721476%2F%D0%9C%D0%BE%D0%BD%D1%82%D0%B0%D0%B6%D0%BD%D0%B0%D1%8F%20%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C%201.png?1552612458465">
   <link rel="apple-touch-icon" sizes="167x167" href="https://cdn.glitch.com/d153c26f-a95c-4089-a5ac-d5158f721476%2F%D0%9C%D0%BE%D0%BD%D1%82%D0%B0%D0%B6%D0%BD%D0%B0%D1%8F%20%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C%2012p.png?1552612458661">
   <link rel="apple-touch-icon" sizes="180x180" href="https://cdn.glitch.com/d153c26f-a95c-4089-a5ac-d5158f721476%2F%D0%9C%D0%BE%D0%BD%D1%82%D0%B0%D0%B6%D0%BD%D0%B0%D1%8F%20%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C%2013p.png?1552612458676">
-  <meta name="Description" content="О расписании занятий для всех факультетов, курсов и групп в Санкт-Петербургском государственном университете телекоммуникаций им. проф. М.А. Бонч-Бруевича (СПбГУТ им. проф. М.А.Бонч-Бруевича)">
+  <meta name="Description" content="О расписании занятий и экзаменов для всех факультетов, курсов и групп в Санкт-Петербургском государственном университете телекоммуникаций им. проф. М.А. Бонч-Бруевича (СПбГУТ им. проф. М.А.Бонч-Бруевича)">
   <link type="text/plain" rel="author" href="https://bonch.glitch.me/humans.txt" />
   <meta name="yandex-verification" content="827fa197018d314c" />
   <meta name="google-site-verification" content="r2KCK5QQwpdTpmyXO6qlrLMhTb8wxKj_HnwID8zoFRs" />
@@ -23,7 +23,7 @@
     <div id="week-number"></div>
   </div>  
   <h1>О расписании СПбГУТ</h1>
-  <button id="change-group" aria-label="Текущая версия" style="min-width: 105px;">Beta v.0.6.0</button>
+  <button id="change-group" aria-label="Текущая версия" style="min-width: 105px;">Beta v.0.7.0</button>
   </header><div class="bg"></div>
   <nav>
     <div class="week">
@@ -34,8 +34,9 @@
         <div id="current-end">12.01</div>
         <div id="indicator"></div>
     </div>
-      <div class="pagination" style="justify-content:center;">
-      <a href="https://bonch.glitch.me/" class="but big" style="width:24vw;">На главную</a>
+      <div class="pagination">
+      <a href="https://bonch.glitch.me/" title="Расписание занятий" class="but">Пары</a>
+      <a href="https://bonch.glitch.me/exams" title="Расписание экзаменов" class="but">Экзам.</a>
     </div>
   </div>
   </nav>
@@ -88,13 +89,15 @@
       <div class="title-block">Обновления</div>
       <p class="text">
         v0.1.0 - 10.02.2019 : beta-тест<br>
-        v0.2.0 - 26.02.2019 : оффлайн работа<br>
+        v0.2.0 - 26.02.2019 : works offline<br>
         v0.3.0 - 05.03.2019 : vanilla js<br>
         v0.4.0 - 11.03.2019 : nav + teachers<br>
         v0.5.0 - 13.03.2019 : mobile footer<br>
         v0.5.3 - 15.03.2019 : a2hs button<br>
         v0.5.5 - 16.03.2019 : animation<br>
-        v0.6.0 - 07.04.2019 : about
+        v0.6.0 - 07.04.2019 : about<br>
+        v0.7.0 - 26.04.2019 : exams<br>
+        v0.8.0 - 18.09.2019 : tablet view
       </p>
     </div>
     <div class="item feedback">
