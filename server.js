@@ -2,8 +2,13 @@ const express = require('express');
 var compression = require('compression')
 var request = require('request');
 var cheerio = require('cheerio');
+const https = require("https");
 var fs = require('fs');
+var low = require('lowdb')
+var FileSync = require('lowdb/adapters/FileSync')
 var bodyParser = require('body-parser');
+var adapter = new FileSync('groups.json')
+var db = low(adapter)
 const app = express();
 
 app.enable('trust proxy');
@@ -25,22 +30,21 @@ app.get('/', function(req, res) {
 app.get('/humans.txt', function(req, res) {
   res.render('pages/humans'); //val: title <%= val %> 
 });
+app.get('/exams', function(req, res) {
+  res.render('pages/exams'); //val: title <%= val %> 
+});
+//'https://cabinet.sut.ru/raspisanie_all_new?faculty=' + faculty + '&choice=1&type_z=1&schet=205.1920/1&kurs=' + kurs
 app.get('/choose',function(req,res) {
   var groups = [];
-  var kurs = req.query.kurs;
-  var faculty = req.query.faculty;
-  console.log("Факультет "+faculty+", "+kurs+" курс");
-  var url = 'https://cabinet.sut.ru/raspisanie_all_new?schet=205.1819/2&type_z=1&faculty=' + faculty + "&kurs=" + kurs;
-  request(url, function(error, response, html){
-    if(!error){
-      var $ = cheerio.load(html);
-      $("#group option").each(function(){
-        groups.push({value : $(this).attr('value'), name : $(this).text()});
-      });
-      groups[0].name = 'Группа';
-      res.send(groups);
-    }
+  var kurs = req.query.kurs - 1;
+  var faculty = req.query.faculty+"";
+  console.log('ready to load '+ faculty + kurs);
+  var users = db.get(faculty).value()
+  //console.log(users[kurs]);
+  users[kurs].forEach(function(user) {
+    groups.push(user);
   });
+  res.send(groups);
 });
 //https://cabinet.sut.ru/raspisanie_all_new?schet=205.1819/2&type_z=1&faculty=50029&kurs=1&group=53768
 app.get('/schedule', function(req, res) {
@@ -48,11 +52,14 @@ app.get('/schedule', function(req, res) {
   var kurs = req.query.kurs;
   var faculty = req.query.faculty;
   var group = req.query.group;
-  var url = 'https://cabinet.sut.ru/raspisanie_all_new?schet=205.1819/2&type_z=1&faculty=' + faculty + "&kurs=" + kurs + "&group=" + group;
+  //console.log(kurs +" " +faculty+ " "+group);
+  var url = 'http://cabinet.sut.ru/raspisanie_all_new?schet=205.1920/1&type_z=1&faculty=' + faculty + "&kurs=" + kurs + "&group=" + group;
+  //console.log(url);
   request(url, function(error, response, html){
     if(!error){
       var $ = cheerio.load(html);
       if($("p").text() === "� ��������� ������ ���� ������ �� ��������. ���������� � ���������� ��������������."){ res.send(["Упс, что-то пошло не по плану..."]);}else{
+        
         for(var i = 1; i < 7; i++){
           var pairs = [];
           $("#rightpanel tr td .pair[weekday^="+i+"]").each(function(index, element) {
@@ -78,16 +85,49 @@ app.get('/schedule', function(req, res) {
           schedule[i-1] = pairs;
       }
       res.send(schedule);}
+    } else {console.log(error)}
+  });
+});
+app.get('/exam', function(req, res) {
+  var pairs = [];
+  var kurs = req.query.kurs;
+  var faculty = req.query.faculty;
+  var group = req.query.group;
+  var url = 'https://cabinet.sut.ru/raspisanie_all_new?schet=205.1920/1&type_z=2&faculty=' + faculty + "&kurs=" + kurs + "&group=" + group;
+  request(url, function(error, response, html){
+    if(!error){
+      var $ = cheerio.load(html);
+      if($("#rightpanel").text().includes("Занятий для выбранной группы не найдено")){ res.send(["Расписание экзаменов этой группы пока недоступно"]);}else{
+          $(".pair").each(function(index, element) {
+            var time = $('td', this).eq(1).text();
+            var clas = $('.subect', this).text().replace('Элективные дисциплины по физической культуре и спорту','Физическая культура и спорт');
+            var wek = $('td', this).eq(0).text().replace('.2019',' ');
+
+            //console.log(pairs.length, pairs.length > 0 ? pairs[pairs.length-1].number : 0);
+            if(pairs.length > 0 && clas === pairs[pairs.length - 1].class && pairs[pairs.length - 1].weeks === wek){
+              pairs[pairs.length - 1].teacher += '\n' + $('.teacher', this).text().replace(/,|-./g, "\n");
+              pairs[pairs.length - 1].cabinet === $('.aud', this).text().replace(/ ауд.: |;| Б22|-0/g, '').replace(/ткомплекс|тивный комплекс\/1/, "т.\nКомпл.").replace("; ","\n") ? "" : pairs[pairs.length - 1].cabinet += '\n' + $('.aud', this).text().replace(/ ауд.: |;| Б22|-0/g, '').replace(/Спорткомплекс|Спортивный комплекс\/1/, "").replace("\n","");
+              
+            } else {
+            pairs[pairs.length] = {
+              time: time,
+              class: clas,
+              type: $('.type', this).text().replace(/\(|\)/g, "").replace("Практические занятия", "Практика").replace("ораторная работа", ". раб."),
+              cabinet: $('.aud', this).text().replace(/ ауд.: |;| Б22|-0/g, '').replace(/ткомплекс|тивный комплекс\/1/, "т.\nКомпл.").replace("; ","\n"),
+              teacher: $('.teacher', this).text().slice(0, $('.teacher', this).text().search(/\. /i)),
+              weeks: wek
+            }}
+          });
+      res.send(pairs);}
     } else {console.log("err")}
   });
 });
-
 app.get('/teachers', function(req, res) {
   var teachers = [];
   var kurs = req.query.kurs;
   var faculty = req.query.faculty;
   var group = req.query.group;
-  var url = 'https://cabinet.sut.ru/raspisanie_all_new?schet=205.1819/2&type_z=1&faculty=' + faculty + "&kurs=" + kurs + "&group=" + group;
+  var url = 'https://cabinet.sut.ru/raspisanie_all_new?schet=205.1920/1&type_z=1&faculty=' + faculty + "&kurs=" + kurs + "&group=" + group;
   request(url, function(error, response, html){
     if(!error){
       var $ = cheerio.load(html);
@@ -106,5 +146,5 @@ app.get('*', function(req, res) {
     res.redirect('/');
 });
 const listener = app.listen(process.env.PORT, function() {
-  console.log('Ты сел на ' + listener.address().port+ ' порт');
+  //console.log('Ты сел на ' + listener.address().port+ ' порт');
 });
