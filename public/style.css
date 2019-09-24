@@ -325,7 +325,7 @@ body {
     position: absolute;
     bottom: 8px;
     left: 8px;
-    width: 30%;
+    width: calc(35% - 8px);
     white-space: pre-wrap;
   }
   .teachers-name {
@@ -334,7 +334,7 @@ body {
     position: absolute;
     bottom: 8px;
     right: 8px;
-    width: 60%;
+    width: calc(70% - 8px);
     text-align: end;
     white-space: pre-wrap;
   }
@@ -697,7 +697,7 @@ body {
     .teachers-name{
       position: relative;
       float: right;
-      bottom: 0;
+      bottom: -1px;
       max-width: calc(80vw - 125px);
       width: auto;
     }
