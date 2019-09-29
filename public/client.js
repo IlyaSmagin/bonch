@@ -1,5 +1,5 @@
-var date = new Date();
-var thisWeek = Math.floor((Date.parse(date) - Date.parse("2019-09-01T18:30:00+03:00")) / 604800000) + 1;
+var date = new Date();//2019-08-31T19:50:00+03:00 saturday
+var thisWeek = Math.floor((Date.parse(date) - Date.parse("2019-08-31T19:50:00+03:00")) / 604800000) + 1;
 var curWeek = thisWeek;
 
 var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -97,71 +97,69 @@ function display_groups(data) {
 }
 
 function display_schedule(data) {
-  document.getElementsByTagName("main")[0].innerHTML = "";
-  if (data.length === 1) { document.getElementsByTagName("main")[0].innerHTML += "<section><h1>" + data[0] + "</h1><p>Мы уже работаем над устранением проблемы.</p><p>Попробуйте зайти немного позднее.</p></section>"; return };
+  var main = document.getElementsByTagName("main")[0];
+  main.innerHTML = "";
+  if (data.length === 1) { main.innerHTML += data[0]; return }
   var days = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
-  var times = ["9:00-10:35", "10:45-12:20", "13:00-14:35", "14:45-16:20", "16:30-18:05", "9:00-10:30", "10:30-12:00", "12:00-13:30", "13:30-15:00", "15:00-16:30", "16:30-18:05"];
-  var p = window.matchMedia("(max-width: 1160px)").matches;
-  var k = window.matchMedia("(max-width: 990px)").matches;
+  var times = ["9:00-10:35", "10:45-12:20", "13:00-14:35", "14:45-16:20", "16:30-18:05", "18:15-19:50", "9:00-10:30", "10:30-12:00", "12:00-13:30", "13:30-15:00", "15:00-16:30", "16:30-18:05", "18:15-19:50"];
+  var mobile = window.matchMedia("(max-width: 990px)").matches;
   var lecture = '<div class="lecture"><div class="up-block"><div class="number"></div><div class="type"></div><div class="time"><span> пара</span></div></div><div class="classrooms"></div><div class="subject"></div><div class="teachers-name"></div></div>';
 
   for (var d = 0; d < data.length; d++) {
-    if (p) {///rewrite without double
-      document.getElementsByTagName("main")[0].innerHTML += '<div class="day"><div onClick="showDay(this)" class="date"><div class="week-day">' + days[d] + '</div></div></div>';
-    } else {
-      document.getElementsByTagName("main")[0].innerHTML += '<div class="day"><div class="date"><div class="week-day">' + days[d] + '</div></div></div>';
-    }
+    main.innerHTML += '<div class="day"><div class="date"><div class="week-day">' + days[d] + '</div></div></div>';
     var last = document.getElementsByClassName("day")[d];
     var maxHeight = 0;
-    for (var i = 0, n = [0, 0, 0]; i < data[d].length; i++) {
+    for (var i = 0, start = 0, end = 0, total = 0; i < data[d].length; i++) {
+
       if (data[d][i].weeks.search(" " + curWeek + ",") !== -1) {
+
         last.innerHTML += lecture;
-        last.lastChild.getElementsByClassName("number")[0].innerHTML = data[d][i].number;
-        last.lastChild.getElementsByClassName("type")[0].innerHTML = data[d][i].type;
-        last.lastChild.getElementsByClassName("subject")[0].innerHTML = data[d][i].class;
-        last.lastChild.getElementsByClassName("classrooms")[0].innerHTML = data[d][i].cabinet;
-        last.lastChild.getElementsByClassName("teachers-name")[0].innerHTML = data[d][i].teacher;
-        last.lastChild.getElementsByClassName("time")[0].innerHTML = data[d][i].cabinet.startsWith("С") ? (times[data[d][i].number + 4]) : (times[data[d][i].number - 1]);
-        if (parseInt(window.getComputedStyle(last.getElementsByClassName("subject")[n[1]]).height) + Math.max(parseInt(window.getComputedStyle(last.getElementsByClassName("classrooms")[n[1]]).height), parseInt(window.getComputedStyle(last.getElementsByClassName("teachers-name")[n[1]]).height)) > maxHeight) {
-          maxHeight = parseInt(window.getComputedStyle(last.getElementsByClassName("subject")[n[1]]).height) + Math.max(parseInt(window.getComputedStyle(last.getElementsByClassName("classrooms")[n[1]]).height), parseInt(window.getComputedStyle(last.getElementsByClassName("teachers-name")[n[1]]).height));
+        last.getElementsByClassName("number")[total].innerHTML = data[d][i].number;
+        last.getElementsByClassName("type")[total].innerHTML = data[d][i].type;
+        last.getElementsByClassName("subject")[total].innerHTML = data[d][i].class;
+        last.getElementsByClassName("classrooms")[total].innerHTML = data[d][i].cabinet;
+        last.getElementsByClassName("teachers-name")[total].innerHTML = data[d][i].teacher;
+        last.getElementsByClassName("time")[total].innerHTML = data[d][i].cabinet.startsWith("С") ? (times[data[d][i].number + 5]) : (times[data[d][i].number - 1]);
+
+        if (parseInt(window.getComputedStyle(last.getElementsByClassName("subject")[total]).height) + Math.max(parseInt(window.getComputedStyle(last.getElementsByClassName("classrooms")[total]).height), parseInt(window.getComputedStyle(last.getElementsByClassName("teachers-name")[total]).height)) > maxHeight) {
+          maxHeight = parseInt(window.getComputedStyle(last.getElementsByClassName("subject")[total]).height) + Math.max(parseInt(window.getComputedStyle(last.getElementsByClassName("classrooms")[total]).height), parseInt(window.getComputedStyle(last.getElementsByClassName("teachers-name")[total]).height));
         }
-        n[0] === 0 ? n[0] = data[d][i].number : n[2] = data[d][i].number; n[1]++;
+
+        start === 0 ? start = data[d][i].number : end = data[d][i].number;
+        total++;
       }
     }
-    if (k) {
-      if (n[1] !== 0) {
-        last.getElementsByClassName("week-day")[0].innerHTML += ", " + n[1] + (n[1] > 1 ? (n[1] < 5 ? " пары" : " пар") : " пара");
-      } else {
-        last.getElementsByClassName("date")[0].style.borderRadius = "7px";
-        last.getElementsByClassName("week-day")[0].innerHTML += ", пар нет";
-      }
+
+    total === 0 ? last.getElementsByClassName("date")[0].style.borderRadius = "7px" : 0;
+    if (mobile) {
+      var weekDay = document.getElementsByClassName("week-day");
+      weekDay[d].innerHTML += ", " + (total !== 0 ? (total + (total > 1 ? (total < 5 ? " пары" : " пар") : " пара")) : "пар нет");
     } else {
-      n[1] === 0 ? last.getElementsByClassName("date")[0].style.borderRadius = "7px" : 0;
-      var mar = 104;
-      if (n[1] === 5) { for (var i = 0; i < 5; i++) { last.getElementsByClassName("lecture")[i].style.minWidth = "150px" } } else { mar -= 24; }
-      for (var i = 0; i < n[1]; i++) {
+      var mar = 72;
+      for (var i = 0; i < total; i++) {
         last.getElementsByClassName("lecture")[i].style.height = (maxHeight + mar) + 'px';
       }
       last.getElementsByClassName("date")[0].style.height = (maxHeight + mar + 16) + 'px';
     }
-  }//2019-09-01T18:30:00+03:00
-  var dateDay = new Date(2019, 8, 2 + (curWeek - 1) * 7, 18, 0, 0);
-  var onday = document.getElementsByClassName("week-day");
+  }
+
+  var dateDay = new Date(2019, 8, 2 + (curWeek - 1) * 7, 19, 50, 0);//2019-09-2T19:50:00+03:00 monday
+  var weekDay = document.getElementsByClassName("week-day");
   for (var juk = 0; juk < 6; juk++) {
-    var offset;
-    if (dateDay.getMonth() < 9) { offset = ".0"; } else { offset = "."; }
-    onday[juk].innerHTML = (dateDay.getDate()) + offset + (dateDay.getMonth() + 1) + " " + onday[juk].innerHTML;
-    (curWeek === thisWeek && p && Date.now() > dateDay.getTime()) ? showDay(document.getElementsByClassName("date")[juk]) : 0;
+    var offset = dateDay.getMonth() < 9 ? ".0" : ".";
+    weekDay[juk].innerHTML = (dateDay.getDate()) + offset + (dateDay.getMonth() + 1) + " " + weekDay[juk].innerHTML;
+    document.getElementsByClassName("date")[juk].addEventListener('click', showDay, false);
+    (curWeek === thisWeek && mobile && Date.now() > dateDay.getTime()) ? document.getElementsByClassName("date")[juk].click() : 0;
     dateDay.setDate(dateDay.getDate() + 1);
   }
 }
 
-function showDay(a) {
+function showDay(el) {
+  var mobile = window.matchMedia("(max-width: 990px)").matches;
+  var list = el.currentTarget.parentNode.getElementsByClassName("lecture");
+  var da = el.currentTarget.parentNode.getElementsByClassName("date");
 
-  var k = window.matchMedia("(max-width: 990px)").matches;
-  var list = a.parentNode.getElementsByClassName("lecture");
-  var da = a.parentNode.getElementsByClassName("date");
-  if (k) {
+  if (mobile) {
     for (var i = 0; i < list.length; i++) {
       if (list[i].style.display === 'none') {
         list[i].style.display = "block";
@@ -186,7 +184,7 @@ function changeWeek(a) {
 }
 
 function showChoose() {
-  if (window.matchMedia("(max-width: 1200px)").matches) {
+  if (window.matchMedia("(max-width: 1160px)").matches) {
     var modal = document.getElementsByClassName("modal")[0];
     var head = document.getElementsByClassName("bg")[0];
     var btn = document.getElementById("change-group");
@@ -268,17 +266,18 @@ function load_exams() {
   }
 }
 function display_exams(data) {
-  document.getElementsByTagName("main")[0].innerHTML = "";
-  if (data.length === 1) { document.getElementsByTagName("main")[0].innerHTML += "<section><h1>" + data[0] + "</h1><p>Попробуйте зайти немного позднее.</p></section>"; return };
+  var main = document.getElementsByTagName("main")[0];
+  main.innerHTML = "";
+  if (data.length === 1) { main.innerHTML += data[0]; return };
   var p = window.matchMedia("(max-width: 1200px)").matches;
-  var k = window.matchMedia("(max-width: 600px)").matches;
+  var mobile = window.matchMedia("(max-width: 990px)").matches;
   var lecture = '<div class="lecture"><div class="up-block"><div class="number"></div><div class="type"></div><div class="time"><span> пара</span></div></div><div class="classrooms"></div><div class="subject"></div><div class="teachers-name"></div></div>';
 
   for (var d = 0; d < data.length; d++) {
     if (p) {///rewrite without double
-      document.getElementsByTagName("main")[0].innerHTML += '<div class="day"><div onClick="showDay(this)" class="date"><div class="week-day"></div></div></div>';
+      main.innerHTML += '<div class="day"><div onClick="showDay(this)" class="date"><div class="week-day"></div></div></div>';
     } else {
-      document.getElementsByTagName("main")[0].innerHTML += '<div class="day"><div class="date"><div class="week-day"></div></div></div>';
+      main.innerHTML += '<div class="day"><div class="date"><div class="week-day"></div></div></div>';
     }
     var last = document.getElementsByClassName("day")[d];
     var maxHeight = 0;
@@ -295,7 +294,7 @@ function display_exams(data) {
       }
 
     }
-    if (k) {
+    if (mobile) {
       last.getElementsByClassName("date")[0].style.borderRadius = "7px";
     } else if (p) {
       maxHeight = 0;

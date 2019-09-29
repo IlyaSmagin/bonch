@@ -40,12 +40,11 @@ app.get('/choose', function (req, res) {
   var groups = [];
   var kurs = req.query.kurs - 1;
   var faculty = req.query.faculty + "";
-  console.log('ready to load ' + faculty + kurs);
   var users = db.get(faculty).value()
-  //console.log(users[kurs]);
   users[kurs].forEach(function (user) {
     groups.push(user);
   });
+  groups.unshift({ "Группа": 0 });
   res.send(groups);
 });
 //https://cabinet.sut.ru/raspisanie_all_new?schet=205.1819/2&type_z=1&faculty=50029&kurs=1&group=53768
@@ -60,7 +59,9 @@ app.get('/schedule', function (req, res) {
   request(url, function (error, response, html) {
     if (!error) {
       var $ = cheerio.load(html);
-      if ($("p").text() === "� ��������� ������ ���� ������ �� ��������. ���������� � ���������� ��������������.") { res.send(["Упс, что-то пошло не по плану..."]); } else {
+      if ($("p").text() === "� ��������� ������ ���� ������ �� ��������. ���������� � ���������� ��������������.") {
+        res.send(["<section><h1>Упс, что-то пошло не по плану...</h1><p>Мы уже работаем над устранением проблемы.</p><p>Попробуйте зайти немного позднее.</p></section>"]);
+      } else {
 
         for (var i = 1; i < 7; i++) {
           var pairs = [];
@@ -101,7 +102,7 @@ app.get('/exam', function (req, res) {
   request(url, function (error, response, html) {
     if (!error) {
       var $ = cheerio.load(html);
-      if ($("#rightpanel").text().includes("Занятий для выбранной группы не найдено")) { res.send(["Расписание экзаменов этой группы пока недоступно"]); } else {
+      if ($("#rightpanel").text().includes("Занятий для выбранной группы не найдено")) { res.send(["<section><h1>Расписание экзаменов этой группы пока недоступно</h1><p>Попробуйте зайти немного позднее.</p></section>"]); } else {
         $(".pair").each(function (index, element) {
           var time = $('td', this).eq(1).text();
           var clas = $('.subect', this).text().replace('Элективные дисциплины по физической культуре и спорту', 'Физическая культура и спорт');
