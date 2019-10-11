@@ -1,14 +1,11 @@
 var date = new Date();//2019-08-31T19:50:00+03:00 saturday
 var thisWeek = Math.floor((Date.parse(date) - Date.parse("2019-08-31T19:50:00+03:00")) / 604800000) + 1;
 var curWeek = thisWeek;
-
 var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 document.getElementById("current-date").innerHTML = date.toLocaleDateString('ru-RU', options).replace(' г.', "");
-document.getElementById("week-number").innerHTML = thisWeek + " учебная неделя" + (window.matchMedia("(min-width: 1200px)").matches ? (thisWeek % 2 === 0 ? " (четная)" : " (нечетная)") : "");
-if (window.matchMedia("(max-width: 1200px)").matches) {
-  var d = document.getElementById("current-date").innerHTML; document.getElementById("current-date").innerHTML = d.slice(d.indexOf(" ") + 1);
-
-}
+document.getElementById("week-number").innerHTML = thisWeek + " учебная неделя" + (thisWeek % 2 === 0 ? " (четная)" : " (нечетная)");
+var currentDate = document.getElementById("current-date").innerHTML;
+window.matchMedia("(max-width: 990px)").matches ? currentDate += currentDate.slice(currentDate.indexOf(" ") + 1) : "";
 document.getElementById("thisWeek").innerHTML = (curWeek + " ");
 weekDate(thisWeek);
 
@@ -20,10 +17,10 @@ function weekDate(Week) {
   var lastday = date.getDate() - (date.getDay()) + 7;
   date.setDate(diff);
   var offset;
-  if (date.getMonth() < 9) { offset = ".0"; } else { offset = "."; }
+  date.getMonth() < 9 ? offset = ".0" : offset = ".";
   document.getElementById("current-start").innerHTML = date.getDate() + offset + (date.getMonth() + 1);
-  date.setDate(lastday)
-  if (date.getMonth() < 9) { offset = ".0"; } else { offset = "."; }
+  date.setDate(lastday);
+  date.getMonth() < 9 ? offset = ".0" : offset = ".";
   document.getElementById("current-end").innerHTML = date.getDate() + offset + (date.getMonth() + 1);
   return diff;
 }
@@ -48,7 +45,8 @@ function load_group() {
 //use interface function for get requests
 function load_schedule() {
   var kurs, faculty, group;
-  if (document.getElementById("groups").value === '0' && localStorage.getItem("groupName") != null) {
+  var groups = document.getElementById("groups");
+  if (groups.value === 0 && localStorage.getItem("groupName") != null) {
     group = localStorage.getItem('group');
     kurs = localStorage.getItem('kurs');
     faculty = localStorage.getItem('faculty');
@@ -59,7 +57,7 @@ function load_schedule() {
     localStorage.setItem("kurs", kurs);
     localStorage.setItem("faculty", faculty);
     localStorage.setItem("group", group);
-    localStorage.setItem("groupName", document.getElementById("groups")[document.getElementById("groups").selectedIndex].textContent);
+    localStorage.setItem("groupName", groups[groups.selectedIndex].textContent);
   }
   if (group != 0) {
     var xhr = new XMLHttpRequest();
@@ -74,12 +72,14 @@ function load_schedule() {
     var url = window.location.protocol + '//' + window.location.host + '/schedule?kurs=' + kurs + '&faculty=' + faculty + '&group=' + group;
     xhr.open('GET', url);
     xhr.send();
-    if (window.matchMedia("(max-width: 1200px)").matches) {
-      document.getElementById("welcome-form").classList.remove("show");
-      document.getElementsByClassName("bg")[0].style.transform = "translateY(0)";
-      document.getElementsByClassName("bg")[0].style.webkitTransform = "translateY(0)";
+    var welcomeForm = document.getElementById("welcome-form");
+    if (window.matchMedia("(max-width: 1160px)").matches) {
+      var bg = document.getElementsByClassName("bg")[0];
+      welcomeForm.classList.remove("show");
+      bg.style.transform = "translateY(0)";
+      bg.style.webkitTransform = "translateY(0)";
     } else {
-      document.getElementById("welcome-form").style.display = "none";
+      welcomeForm.style.display = "none";
     }
     document.getElementById("change-group").innerHTML = localStorage.getItem('groupName');
   }
@@ -90,8 +90,10 @@ function display_groups(data) {
   while (adr.firstChild) { adr.removeChild(adr.firstChild); }
   for (var i = 0; i < data.length; i++) {
     var option = document.createElement("option");
-    option.value = data[i][Object.keys(data[i])];
-    option.textContent = Object.keys(data[i]);
+    var groupKey = Object.keys(data[i]);
+
+    option.value = data[i][groupKey];
+    option.textContent = groupKey;
     adr.appendChild(option);
   }
 }
@@ -161,14 +163,18 @@ function showDay(el) {
 
   if (mobile) {
     for (var i = 0; i < list.length; i++) {
-      if (list[i].style.display === 'none') {
+
+      if (list[i].style.display === "none") {
         list[i].style.display = "block";
         da[0].style = null;
+
       } else {
+        var radius = "7px";
+
         list[i].style.display = "none";
-        da[0].style.borderRadius = "7px";
-        da[0].style.WebkitBorderRadius = "7px";
-        da[0].style.MozBorderRadius = "7px";
+        da[0].style.borderRadius = radius;
+        da[0].style.WebkitBorderRadius = radius;
+        da[0].style.MozBorderRadius = radius;
       }
     }
   }
@@ -184,10 +190,11 @@ function changeWeek(a) {
 }
 
 function showChoose() {
+  var modal = document.getElementsByClassName("modal")[0];
   if (window.matchMedia("(max-width: 1160px)").matches) {
-    var modal = document.getElementsByClassName("modal")[0];
     var head = document.getElementsByClassName("bg")[0];
     var btn = document.getElementById("change-group");
+    modal.style.display = "block";
     if (head.style.transform != "translateY(244px)") {
       head.style.transform = "translateY(244px)";
       head.style.webkitTransform = "translateY(244px)";
@@ -200,9 +207,7 @@ function showChoose() {
       btn.innerHTML = localStorage.getItem('groupName');
     }
   } else {
-    var modal = document.getElementById("welcome-form");
     var span = document.getElementsByClassName("close")[0];
-    modal.style.display = "block";
     span.onclick = function () {
       modal.style.display = "none";
     }
@@ -210,6 +215,11 @@ function showChoose() {
       if (event.target === modal) {
         modal.style.display = "none";
       }
+    }
+    if (modal.style.display === "block") {
+      modal.style.display = "none";
+    } else {
+      modal.style.display = "block";
     }
   }
 }
