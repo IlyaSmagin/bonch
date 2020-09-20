@@ -1,33 +1,34 @@
-var date = new Date();
-var thisWeek = Math.floor((Date.parse(date) - Date.parse("2019-09-01T18:30:00+03:00")) / 604800000) + 1;
+var date = new Date();//2019-08-31T19:50:00+03:00 saturday
+var thisWeek = Math.floor((Date.parse(date) - Date.parse("2020-08-22T19:50:00+03:00")) / 604800000);
 var curWeek = thisWeek;
-
 var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 document.getElementById("current-date").innerHTML = date.toLocaleDateString('ru-RU', options).replace(' г.', "");
-document.getElementById("week-number").innerHTML = thisWeek + " учебная неделя" + (window.matchMedia("(min-width: 1200px)").matches ? (thisWeek % 2 === 0 ? " (четная)" : " (нечетная)") : "");
-if (window.matchMedia("(max-width: 1200px)").matches) {
-  var d = document.getElementById("current-date").innerHTML; document.getElementById("current-date").innerHTML = d.slice(d.indexOf(" ") + 1);
-
-}
+document.getElementById("week-number").innerHTML = thisWeek + " учебная неделя" + (thisWeek % 2 === 0 ? " (четная)" : " (нечетная)");
+var currentDate = document.getElementById("current-date").innerHTML;
+window.matchMedia("(max-width: 990px)").matches ? currentDate += currentDate.slice(currentDate.indexOf(" ") + 1) : "";
 document.getElementById("thisWeek").innerHTML = (curWeek + " ");
 weekDate(thisWeek);
 
 function weekDate(Week) {
-  var date = Date.parse("2019-09-01T00:00:00+03:00");
-  date = date + (1000 * 60 * 60 * 24 * 7 * (Week - 1));
+  var date = Date.parse("2020-08-24T00:00:00+03:00");
+  date = date + (604800000 * (Week)); //1000 * 60 * 60 * 24 * 7
   date = new Date(date);
   var diff = date.getDate() - date.getDay() + 1;
   var lastday = date.getDate() - (date.getDay()) + 7;
   date.setDate(diff);
   var offset;
-  if (date.getMonth() < 9) { offset = ".0"; } else { offset = "."; }
+  date.getMonth() < 9 ? offset = ".0" : offset = ".";
   document.getElementById("current-start").innerHTML = date.getDate() + offset + (date.getMonth() + 1);
-  date.setDate(lastday)
-  if (date.getMonth() < 9) { offset = ".0"; } else { offset = "."; }
+  date.setDate(lastday);
+  date.getMonth() < 9 ? offset = ".0" : offset = ".";
   document.getElementById("current-end").innerHTML = date.getDate() + offset + (date.getMonth() + 1);
   return diff;
 }
 
+//
+//load on button render aka display_groups onchange
+//
+/*
 function load_group() {
   var kurs = document.getElementById("kurs").value;
   var faculty = document.getElementById("faculty").value;
@@ -37,7 +38,26 @@ function load_group() {
       if (xhr.status >= 200 && xhr.status < 300) {
         display_groups(JSON.parse(xhr.response));
       } else {
-        display_groups([{ name: "Что-то не так, попробуйте позже" }]);
+        display_groups([{ "Загрузка": name }]);
+      }
+    };
+    var url = window.location.protocol + '//' + window.location.host + '/choose?kurs=' + kurs + '&faculty=' + faculty;
+    xhr.open('GET', url);
+    xhr.send();
+  }
+}
+//use interf
+*/
+function load_group() {
+  var kurs = document.getElementById("kurs").value;
+  var faculty = document.getElementById("faculty").value;
+  if (kurs != 0 && faculty != 0) {
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        display_groups(JSON.parse(xhr.response));
+      } else {
+        display_groups([{ "Загрузка": name }]);
       }
     };
     var url = window.location.protocol + '//' + window.location.host + '/choose?kurs=' + kurs + '&faculty=' + faculty;
@@ -48,7 +68,8 @@ function load_group() {
 //use interface function for get requests
 function load_schedule() {
   var kurs, faculty, group;
-  if (document.getElementById("groups").value === '0' && localStorage.getItem("groupName") != null) {
+  var groups = document.getElementById("groups");
+  if (groups.value === "0" && localStorage.getItem("groupName") != null) {
     group = localStorage.getItem('group');
     kurs = localStorage.getItem('kurs');
     faculty = localStorage.getItem('faculty');
@@ -59,7 +80,7 @@ function load_schedule() {
     localStorage.setItem("kurs", kurs);
     localStorage.setItem("faculty", faculty);
     localStorage.setItem("group", group);
-    localStorage.setItem("groupName", document.getElementById("groups")[document.getElementById("groups").selectedIndex].textContent);
+    localStorage.setItem("groupName", groups[groups.selectedIndex].textContent);
   }
   if (group != 0) {
     var xhr = new XMLHttpRequest();
@@ -74,14 +95,17 @@ function load_schedule() {
     var url = window.location.protocol + '//' + window.location.host + '/schedule?kurs=' + kurs + '&faculty=' + faculty + '&group=' + group;
     xhr.open('GET', url);
     xhr.send();
-    if (window.matchMedia("(max-width: 1200px)").matches) {
-      document.getElementById("welcome-form").classList.remove("show");
-      document.getElementsByClassName("bg")[0].style.transform = "translateY(0)";
-      document.getElementsByClassName("bg")[0].style.webkitTransform = "translateY(0)";
+    var welcomeForm = document.getElementById("welcome-form");
+    if (window.matchMedia("(max-width: 1160px)").matches) {
+      var bg = document.getElementsByClassName("bg")[0];
+      welcomeForm.classList.remove("show");
+      bg.style.transform = "translateY(0)";
+      bg.style.webkitTransform = "translateY(0)";
     } else {
-      document.getElementById("welcome-form").style.display = "none";
+      welcomeForm.style.display = "none";
     }
     document.getElementById("change-group").innerHTML = localStorage.getItem('groupName');
+    if(localStorage.getItem('layout') != null){ document.getElementById("expanded").disabled = false; }
   }
 }
 
@@ -90,94 +114,98 @@ function display_groups(data) {
   while (adr.firstChild) { adr.removeChild(adr.firstChild); }
   for (var i = 0; i < data.length; i++) {
     var option = document.createElement("option");
-    option.value = data[i][Object.keys(data[i])];
-    option.textContent = Object.keys(data[i]);
+    var groupKey = Object.keys(data[i]);
+
+    option.value = data[i][groupKey];
+    option.textContent = groupKey;
     adr.appendChild(option);
+    localStorage.getItem('group') == option.value ? adr.selectedIndex = i : 0;
   }
 }
 
 function display_schedule(data) {
-  document.getElementsByTagName("main")[0].innerHTML = "";
-  if (data.length === 1) { document.getElementsByTagName("main")[0].innerHTML += "<section><h1>" + data[0] + "</h1><p>Мы уже работаем над устранением проблемы.</p><p>Попробуйте зайти немного позднее.</p></section>"; return };
+  var main = document.getElementsByTagName("main")[0];
+  main.innerHTML = "";
+  if (data.length === 1) { main.innerHTML += data[0]; return }
   var days = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
-  var times = ["9:00-10:35", "10:45-12:20", "13:00-14:35", "14:45-16:20", "16:30-18:05", "9:00-10:30", "10:30-12:00", "12:00-13:30", "13:30-15:00", "15:00-16:30", "16:30-18:05"];
-  var p = window.matchMedia("(max-width: 1160px)").matches;
-  var k = window.matchMedia("(max-width: 990px)").matches;
+  var times = ["9:00-10:35", "10:45-12:20", "13:00-14:35", "14:45-16:20", "16:30-18:05", "18:15-19:50", "9:00-10:30", "10:30-12:00", "12:00-13:30", "13:30-15:00", "15:00-16:30", "16:30-18:05", "18:15-19:50"];
+  var mobile = window.matchMedia("(max-width: 990px)").matches;
   var lecture = '<div class="lecture"><div class="up-block"><div class="number"></div><div class="type"></div><div class="time"><span> пара</span></div></div><div class="classrooms"></div><div class="subject"></div><div class="teachers-name"></div></div>';
 
   for (var d = 0; d < data.length; d++) {
-    if (p) {///rewrite without double
-      document.getElementsByTagName("main")[0].innerHTML += '<div class="day"><div onClick="showDay(this)" class="date"><div class="week-day">' + days[d] + '</div></div></div>';
-    } else {
-      document.getElementsByTagName("main")[0].innerHTML += '<div class="day"><div class="date"><div class="week-day">' + days[d] + '</div></div></div>';
-    }
+    main.innerHTML += '<div class="day"><div class="date"><div class="week-day">' + days[d] + '</div></div></div>';
     var last = document.getElementsByClassName("day")[d];
     var maxHeight = 0;
-    for (var i = 0, n = [0, 0, 0]; i < data[d].length; i++) {
+    for (var i = 0, start = 0, end = 0, total = 0; i < data[d].length; i++) {
+
       if (data[d][i].weeks.search(" " + curWeek + ",") !== -1) {
+
         last.innerHTML += lecture;
-        last.lastChild.getElementsByClassName("number")[0].innerHTML = data[d][i].number;
-        last.lastChild.getElementsByClassName("type")[0].innerHTML = data[d][i].type;
-        last.lastChild.getElementsByClassName("subject")[0].innerHTML = data[d][i].class;
-        last.lastChild.getElementsByClassName("classrooms")[0].innerHTML = data[d][i].cabinet;
-        last.lastChild.getElementsByClassName("teachers-name")[0].innerHTML = data[d][i].teacher;
-        last.lastChild.getElementsByClassName("time")[0].innerHTML = data[d][i].cabinet.startsWith("С") ? (times[data[d][i].number + 4]) : (times[data[d][i].number - 1]);
-        if (parseInt(window.getComputedStyle(last.getElementsByClassName("subject")[n[1]]).height) + Math.max(parseInt(window.getComputedStyle(last.getElementsByClassName("classrooms")[n[1]]).height), parseInt(window.getComputedStyle(last.getElementsByClassName("teachers-name")[n[1]]).height)) > maxHeight) {
-          maxHeight = parseInt(window.getComputedStyle(last.getElementsByClassName("subject")[n[1]]).height) + Math.max(parseInt(window.getComputedStyle(last.getElementsByClassName("classrooms")[n[1]]).height), parseInt(window.getComputedStyle(last.getElementsByClassName("teachers-name")[n[1]]).height));
+        last.getElementsByClassName("number")[total].innerHTML = data[d][i].number;
+        last.getElementsByClassName("type")[total].innerHTML = data[d][i].type;
+        last.getElementsByClassName("subject")[total].innerHTML = data[d][i].class;
+        last.getElementsByClassName("classrooms")[total].innerHTML = data[d][i].cabinet;
+        last.getElementsByClassName("teachers-name")[total].innerHTML = data[d][i].teacher;
+        last.getElementsByClassName("time")[total].innerHTML = data[d][i].cabinet.startsWith("С") ? (times[data[d][i].number + 5]) : (times[data[d][i].number - 1]);
+
+        if (parseInt(window.getComputedStyle(last.getElementsByClassName("subject")[total]).height) + Math.max(parseInt(window.getComputedStyle(last.getElementsByClassName("classrooms")[total]).height), parseInt(window.getComputedStyle(last.getElementsByClassName("teachers-name")[total]).height)) > maxHeight) {
+          maxHeight = parseInt(window.getComputedStyle(last.getElementsByClassName("subject")[total]).height) + Math.max(parseInt(window.getComputedStyle(last.getElementsByClassName("classrooms")[total]).height), parseInt(window.getComputedStyle(last.getElementsByClassName("teachers-name")[total]).height));
         }
-        n[0] === 0 ? n[0] = data[d][i].number : n[2] = data[d][i].number; n[1]++;
+
+        start === 0 ? start = data[d][i].number : end = data[d][i].number;
+        total++;
       }
     }
-    if (k) {
-      if (n[1] !== 0) {
-        last.getElementsByClassName("week-day")[0].innerHTML += ", " + n[1] + (n[1] > 1 ? (n[1] < 5 ? " пары" : " пар") : " пара");
-      } else {
-        last.getElementsByClassName("date")[0].style.borderRadius = "7px";
-        last.getElementsByClassName("week-day")[0].innerHTML += ", пар нет";
-      }
+
+    total === 0 ? last.getElementsByClassName("date")[0].style.borderRadius = "7px" : 0;
+    if (mobile) {
+      var weekDay = document.getElementsByClassName("week-day");
+      weekDay[d].innerHTML += ", " + (total !== 0 ? (total + (total > 1 ? (total < 5 ? " пары" : " пар") : " пара")) : "пар нет");
     } else {
-      n[1] === 0 ? last.getElementsByClassName("date")[0].style.borderRadius = "7px" : 0;
-      var mar = 104;
-      if (n[1] === 5) { for (var i = 0; i < 5; i++) { last.getElementsByClassName("lecture")[i].style.minWidth = "150px" } } else { mar -= 24; }
-      for (var i = 0; i < n[1]; i++) {
+      var mar = 72;
+      for (var i = 0; i < total; i++) {
         last.getElementsByClassName("lecture")[i].style.height = (maxHeight + mar) + 'px';
       }
       last.getElementsByClassName("date")[0].style.height = (maxHeight + mar + 16) + 'px';
     }
-  }//2019-09-01T18:30:00+03:00
-  var dateDay = new Date(2019, 8, 2 + (curWeek - 1) * 7, 18, 0, 0);
-  var onday = document.getElementsByClassName("week-day");
+  }
+
+  var dateDay = new Date(2020, 7, 24 + (curWeek) * 7, 19, 50, 0);//2019-09-2T19:50:00+03:00 monday
+  var weekDay = document.getElementsByClassName("week-day");
   for (var juk = 0; juk < 6; juk++) {
-    var offset;
-    if (dateDay.getMonth() < 9) { offset = ".0"; } else { offset = "."; }
-    onday[juk].innerHTML = (dateDay.getDate()) + offset + (dateDay.getMonth() + 1) + " " + onday[juk].innerHTML;
-    (curWeek === thisWeek && p && Date.now() > dateDay.getTime()) ? showDay(document.getElementsByClassName("date")[juk]) : 0;
+    var offset = dateDay.getMonth() < 9 ? ".0" : ".";
+    weekDay[juk].innerHTML = (dateDay.getDate()) + offset + (dateDay.getMonth() + 1) + " " + weekDay[juk].innerHTML;
+    document.getElementsByClassName("date")[juk].addEventListener('click', showDay, false);
+    (curWeek === thisWeek && mobile && Date.now() > dateDay.getTime()) ? document.getElementsByClassName("date")[juk].click() : 0;
     dateDay.setDate(dateDay.getDate() + 1);
   }
 }
 
-function showDay(a) {
+function showDay(el) {
+  var mobile = window.matchMedia("(max-width: 990px)").matches;
+  var list = el.currentTarget.parentNode.getElementsByClassName("lecture");
+  var da = el.currentTarget.parentNode.getElementsByClassName("date");
 
-  var k = window.matchMedia("(max-width: 990px)").matches;
-  var list = a.parentNode.getElementsByClassName("lecture");
-  var da = a.parentNode.getElementsByClassName("date");
-  if (k) {
+  if (mobile) {
     for (var i = 0; i < list.length; i++) {
-      if (list[i].style.display === 'none') {
-        list[i].style.display = "block";
+
+      if (list[i].className == 'lecture collapsed') {
+        list[i].classList.remove('collapsed');
         da[0].style = null;
+
       } else {
-        list[i].style.display = "none";
-        da[0].style.borderRadius = "7px";
-        da[0].style.WebkitBorderRadius = "7px";
-        da[0].style.MozBorderRadius = "7px";
+        var radius = "7px";
+        list[i].classList.add('collapsed');
+        da[0].style.borderRadius = radius;
+        da[0].style.WebkitBorderRadius = radius;
+        da[0].style.MozBorderRadius = radius;
       }
     }
   }
 }
 
 function changeWeek(a) {
-  if ((curWeek >= 1 || a >= 0) && (a <= 0 || curWeek < 17)) {
+  if ((curWeek >= 1 || a >= 0) && (a <= 0 || curWeek < 18)) {
     curWeek += a;
     document.getElementById("thisWeek").innerHTML = curWeek + " ";
     weekDate(curWeek);
@@ -186,10 +214,11 @@ function changeWeek(a) {
 }
 
 function showChoose() {
-  if (window.matchMedia("(max-width: 1200px)").matches) {
-    var modal = document.getElementsByClassName("modal")[0];
+  var modal = document.getElementsByClassName("modal")[0];
+  if (window.matchMedia("(max-width: 1160px)").matches) {
     var head = document.getElementsByClassName("bg")[0];
     var btn = document.getElementById("change-group");
+    modal.style.display = "block";
     if (head.style.transform != "translateY(244px)") {
       head.style.transform = "translateY(244px)";
       head.style.webkitTransform = "translateY(244px)";
@@ -202,9 +231,7 @@ function showChoose() {
       btn.innerHTML = localStorage.getItem('groupName');
     }
   } else {
-    var modal = document.getElementById("welcome-form");
     var span = document.getElementsByClassName("close")[0];
-    modal.style.display = "block";
     span.onclick = function () {
       modal.style.display = "none";
     }
@@ -213,7 +240,21 @@ function showChoose() {
         modal.style.display = "none";
       }
     }
+    if (modal.style.display === "block") {
+      modal.style.display = "none";
+    } else {
+      modal.style.display = "block";
+    }
   }
+  //
+  var kurs = document.getElementById("kurs").selectedIndex = localStorage.getItem('kurs');
+  var faculty = document.getElementById("faculty");
+  for(var x=0;x < faculty.length -1 ; x++){
+    if(localStorage.getItem('faculty') == faculty.options[x].value){
+      faculty.selectedIndex = x;
+    }
+  }
+  load_group();
 }
 
 let deferredPrompt;
@@ -268,20 +309,20 @@ function load_exams() {
   }
 }
 function display_exams(data) {
-  document.getElementsByTagName("main")[0].innerHTML = "";
-  if (data.length === 1) { document.getElementsByTagName("main")[0].innerHTML += "<section><h1>" + data[0] + "</h1><p>Попробуйте зайти немного позднее.</p></section>"; return };
+  var main = document.getElementsByTagName("main")[0];
+  main.innerHTML = "";
+  if (data.length === 1) { main.innerHTML += data[0]; return };
   var p = window.matchMedia("(max-width: 1200px)").matches;
-  var k = window.matchMedia("(max-width: 600px)").matches;
+  var mobile = window.matchMedia("(max-width: 990px)").matches;
   var lecture = '<div class="lecture"><div class="up-block"><div class="number"></div><div class="type"></div><div class="time"><span> пара</span></div></div><div class="classrooms"></div><div class="subject"></div><div class="teachers-name"></div></div>';
 
   for (var d = 0; d < data.length; d++) {
-    if (p) {///rewrite without double
-      document.getElementsByTagName("main")[0].innerHTML += '<div class="day"><div onClick="showDay(this)" class="date"><div class="week-day"></div></div></div>';
-    } else {
-      document.getElementsByTagName("main")[0].innerHTML += '<div class="day"><div class="date"><div class="week-day"></div></div></div>';
-    }
+    
+    main.innerHTML += '<div class="day"><div class="date"><div class="week-day"></div></div></div>';
+    document.getElementsByClassName("date")[d].addEventListener('click', showDay(this) );
     var last = document.getElementsByClassName("day")[d];
     var maxHeight = 0;
+    
     for (var i = 0; i < 1; i++) {
       last.innerHTML += lecture;
       last.lastChild.getElementsByClassName("type")[0].innerHTML = data[d].type;
@@ -295,7 +336,7 @@ function display_exams(data) {
       }
 
     }
-    if (k) {
+    if (mobile) {
       last.getElementsByClassName("date")[0].style.borderRadius = "7px";
     } else if (p) {
       maxHeight = 0;
@@ -312,3 +353,13 @@ function display_exams(data) {
     }
   }
 }
+document.getElementById("thisWeek").addEventListener('click', function(event) {
+  if(localStorage.getItem('layout') == null){
+    document.getElementById("expanded").disabled = false;
+    localStorage.setItem('layout', 'expanded');
+  } else {
+    localStorage.removeItem('layout');
+    document.getElementById("expanded").disabled = true;
+  }
+  
+});

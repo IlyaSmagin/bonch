@@ -16,20 +16,16 @@
   <link rel="apple-touch-icon" sizes="180x180" href="https://cdn.glitch.com/d153c26f-a95c-4089-a5ac-d5158f721476%2F%D0%9C%D0%BE%D0%BD%D1%82%D0%B0%D0%B6%D0%BD%D0%B0%D1%8F%20%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C%2013p.png?1552612458676">
 
   <link rel="preconnect" href="https://cdn.glitch.com">
-  <link rel="stylesheet" media="all" href="style.css">
-  <link rel="stylesheet" media="all" href="expanded.css" id="expanded" disabled>
-</head>
-<body onload="load_schedule()">
+  <link rel="stylesheet" media="all" href="style.css"></head>
+<body>
   <header>
   <div class="date-block">
     <div id="current-date"></div>
     <div id="week-number"></div>
   </div>  
-  <h1>Расписание СПбГУТ</h1>
-  <button id="change-group" tabindex="0" title="Выбрать группу" aria-label="Выбрать факультет, курс и группу" onClick="showChoose()">Группа</button>
+  <h1 style="width: auto; margin: 0 auto 0 auto">Расписание СПбГУТ</h1>
   </header>
   <div class="bg"></div>
-  <% include ../partials/choose %>
   <nav>
     <div class="week">
       <div class="current-week">
@@ -38,16 +34,30 @@
         <div id="indicator"></div>
     </div>
       <div class="pagination">
-      <div class="but"  tabindex="0" title="Предыдущая неделя" onClick="changeWeek(-1)">Пред.</div>
-      <div class="but" tabindex="0" title="Следующая неделя" onClick="changeWeek(1)">След.</div>
+      <a href="/" title="Расписание занятий" class="but">Пары</a>
+      <a href="/exams" title="Расписание экзаменов" class="but">Экзам.</a>
     </div>
   </div>
   </nav>
   <main>
     <section>
-      <h1>Расписание в СПбГУТ</h1>
-      <p>Выберите Вашу группу нажав на кнопку в правом верхнем углу</p>
-      <p>Мы запоминаем Вашу группу для работы без интернета</p>
+    <h1>Обновления</h1>
+    <div class="item changelog">
+      <div class="title-block">0.1.0 - 10.02.2019</div>
+      <p class="text">
+        v0.1.0 - 10.02.2019 : beta-тест<br>
+        v0.2.0 - 26.02.2019 : works offline<br>
+        v0.3.0 - 05.03.2019 : vanilla js<br>
+        v0.4.0 - 11.03.2019 : nav + teachers<br>
+        v0.5.0 - 13.03.2019 : mobile footer<br>
+        v0.5.3 - 15.03.2019 : a2hs button<br>
+        v0.5.5 - 16.03.2019 : animation<br>
+        v0.6.0 - 07.04.2019 : about<br>
+        v0.7.0 - 26.04.2019 : exams<br>
+        v0.8.0 - 18.09.2019 : tablet view<br>
+        v0.9.0 - 12.10.2019 : dark theme
+      </p>
+    </div>
     </section>
   </main>
   <footer>

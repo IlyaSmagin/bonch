@@ -18,8 +18,8 @@ app.use(function (req, res, next) {
     next();
   } else {
     //change next 2 strings for local testing
-    res.redirect('https://' + req.headers.host + req.url);
-    //next();
+    //res.redirect('https://' + req.headers.host + req.url);
+    next();
   }
 });
 app.use(express.static('public'));
@@ -32,6 +32,9 @@ app.get('/', function (req, res) {
 app.get('/humans.txt', function (req, res) {
   res.render('pages/humans'); //val: title <%= val %> 
 });
+app.get('/updates', function (req, res) {
+  res.render('pages/updates'); //val: title <%= val %> 
+});
 app.get('/exams', function (req, res) {
   res.render('pages/exams'); //val: title <%= val %> 
 });
@@ -40,27 +43,29 @@ app.get('/choose', function (req, res) {
   var groups = [];
   var kurs = req.query.kurs - 1;
   var faculty = req.query.faculty + "";
-  console.log('ready to load ' + faculty + kurs);
   var users = db.get(faculty).value()
-  //console.log(users[kurs]);
   users[kurs].forEach(function (user) {
     groups.push(user);
   });
+  groups.unshift({ "Группа": 0 });
   res.send(groups);
 });
 //https://cabinet.sut.ru/raspisanie_all_new?schet=205.1819/2&type_z=1&faculty=50029&kurs=1&group=53768
+//https://cabinet.sut.ru/raspisanie_all_new?type_z=1
 app.get('/schedule', function (req, res) {
   var schedule = [];
   var kurs = req.query.kurs;
   var faculty = req.query.faculty;
   var group = req.query.group;
   //console.log(kurs +" " +faculty+ " "+group);
-  var url = 'http://cabinet.sut.ru/raspisanie_all_new?schet=205.1920/1&type_z=1&faculty=' + faculty + "&kurs=" + kurs + "&group=" + group;
+  var url = 'http://cabinet.sut.ru/raspisanie_all_new?type_z=1&faculty=' + faculty + "&kurs=" + kurs + "&group=" + group;
   //console.log(url);
   request(url, function (error, response, html) {
     if (!error) {
       var $ = cheerio.load(html);
-      if ($("p").text() === "� ��������� ������ ���� ������ �� ��������. ���������� � ���������� ��������������.") { res.send(["Упс, что-то пошло не по плану..."]); } else {
+      if ($("p").text() === "� ��������� ������ ���� ������ �� ��������. ���������� � ���������� ��������������.") {
+        res.send(["<section><h1>Упс, что-то пошло не по плану...</h1><p>Мы уже работаем над устранением проблемы.</p><p>Попробуйте зайти немного позднее.</p></section>"]);
+      } else {
 
         for (var i = 1; i < 7; i++) {
           var pairs = [];
@@ -97,11 +102,11 @@ app.get('/exam', function (req, res) {
   var kurs = req.query.kurs;
   var faculty = req.query.faculty;
   var group = req.query.group;
-  var url = 'https://cabinet.sut.ru/raspisanie_all_new?schet=205.1920/1&type_z=2&faculty=' + faculty + "&kurs=" + kurs + "&group=" + group;
+  var url = 'https://cabinet.sut.ru/raspisanie_all_new?schet=205.1920/2&type_z=2&faculty=' + faculty + "&kurs=" + kurs + "&group=" + group;
   request(url, function (error, response, html) {
     if (!error) {
       var $ = cheerio.load(html);
-      if ($("#rightpanel").text().includes("Занятий для выбранной группы не найдено")) { res.send(["Расписание экзаменов этой группы пока недоступно"]); } else {
+      if ($("#rightpanel").text().includes("Занятий для выбранной группы не найдено")) { res.send(["<section><h1>Расписание экзаменов этой группы пока недоступно</h1><p>Попробуйте зайти немного позднее.</p></section>"]); } else {
         $(".pair").each(function (index, element) {
           var time = $('td', this).eq(1).text();
           var clas = $('.subect', this).text().replace('Элективные дисциплины по физической культуре и спорту', 'Физическая культура и спорт');
@@ -110,14 +115,14 @@ app.get('/exam', function (req, res) {
           //console.log(pairs.length, pairs.length > 0 ? pairs[pairs.length-1].number : 0);
           if (pairs.length > 0 && clas === pairs[pairs.length - 1].class && pairs[pairs.length - 1].weeks === wek) {
             pairs[pairs.length - 1].teacher += '\n' + $('.teacher', this).text().replace(/,|-./g, "\n");
-            pairs[pairs.length - 1].cabinet === $('.aud', this).text().replace(/ ауд.: |;| Б22|-0/g, '').replace(/ткомплекс|тивный комплекс\/1/, "т.\nКомпл.").replace("; ", "\n") ? "" : pairs[pairs.length - 1].cabinet += '\n' + $('.aud', this).text().replace(/ ауд.: |;| Б22|-0/g, '').replace(/Спорткомплекс|Спортивный комплекс\/1/, "").replace("\n", "");
+            pairs[pairs.length - 1].cabinet === $('.aud', this).text().replace(/ ауд.: |;| Б22|-0/g, '').replace(" пр.Большевиков,22,к.", '/').replace(/ткомплекс|тивный комплекс\/1/, "т.\nКомпл.").replace("; ", "\n") ? "" : pairs[pairs.length - 1].cabinet += '\n' + $('.aud', this).text().replace(/ ауд.: |;| Б22|-0/g, '').replace(/Спорткомплекс|Спортивный комплекс\/1/, "").replace("\n", "");
 
           } else {
             pairs[pairs.length] = {
               time: time,
               class: clas,
-              type: $('.type', this).text().replace(/\(|\)/g, "").replace("Практические занятия", "Практика").replace("ораторная работа", ". раб."),
-              cabinet: $('.aud', this).text().replace(/ ауд.: |;| Б22|-0/g, '').replace(/ткомплекс|тивный комплекс\/1/, "т.\nКомпл.").replace("; ", "\n"),
+              type: $('.type', this).text().replace(/\(|\)/g, "").replace("Практические занятия", "Практика").replace("ораторная работа", ". раб.").replace("ация", '.'),
+              cabinet: $('.aud', this).text().replace(/ ауд.: |;| Б22|-0/g, '').replace(/ткомплекс|тивный комплекс\/1/, "т.\nКомпл.").replace("; ", "\n").replace(" пр.Большевиков,22,к.", '/'),
               teacher: $('.teacher', this).text().slice(0, $('.teacher', this).text().search(/\. /i)),
               weeks: wek
             }
@@ -133,7 +138,7 @@ app.get('/teachers', function (req, res) {
   var kurs = req.query.kurs;
   var faculty = req.query.faculty;
   var group = req.query.group;
-  var url = 'https://cabinet.sut.ru/raspisanie_all_new?schet=205.1920/1&type_z=1&faculty=' + faculty + "&kurs=" + kurs + "&group=" + group;
+  var url = 'https://cabinet.sut.ru/raspisanie_all_new?schet=205.1920/2&type_z=1&faculty=' + faculty + "&kurs=" + kurs + "&group=" + group;
   request(url, function (error, response, html) {
     if (!error) {
       var $ = cheerio.load(html);
