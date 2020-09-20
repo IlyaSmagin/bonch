@@ -1,22 +1,39 @@
 {
   "short_name": "Расписание",
-  "name": "Bonch Расписание",
+  "name": "СПбГУТ Расписание занятий и экзаменов",
   "description": "Расписание занятий для всех факультетов, курсов и групп в СПбГУТ им. проф. М.А.Бонч-Бруевича",
   "icons": [
-    {
-      "src": "https://cdn.glitch.com/d153c26f-a95c-4089-a5ac-d5158f721476%2F%D0%A1%D0%BB%D0%BE%D0%B9%2012.png?1552446588938",
-      "type": "image/png",
-      "sizes": "512x512"
-    },
     {
       "src": "https://cdn.glitch.com/d153c26f-a95c-4089-a5ac-d5158f721476%2F%D0%A1%D0%BB%D0%BE%D0%B9%201.png?1552446598593",
       "type": "image/png",
       "sizes": "192x192"
+    },
+    {
+      "src": "https://cdn.glitch.com/d153c26f-a95c-4089-a5ac-d5158f721476%2F%D0%A1%D0%BB%D0%BE%D0%B9%2012.png?1552446588938",
+      "type": "image/png",
+      "sizes": "512x512"
     }
   ],
   "scope": "/",
   "start_url": "/",
-  "theme_color": "#256697",
+  "theme_color": "#ffbc42",
   "background_color": "#fffcf7",
-  "display": "standalone"
+  "display": "standalone",
+  "shortcuts": [
+    {
+      "name": "Расписание на неделю",
+      "short_name": "Расписание",
+      "description": "Просмотр расписания на текущую неделю",
+      "url": "/",
+      "icons": [{ "src": "https://cdn.glitch.com/d153c26f-a95c-4089-a5ac-d5158f721476%2F%D0%A1%D0%BB%D0%BE%D0%B9%201.png?1552446598593",
+                  "sizes": "192x192" }]
+    },
+    {
+      "name": "Расписание экзаменов",
+      "short_name": "Экзамены",
+      "description": "Просмотр экзаменов текущей сессии",
+      "url": "/exams",
+      "icons": [{ "src": "https://cdn.glitch.com/d153c26f-a95c-4089-a5ac-d5158f721476%2F%D0%A1%D0%BB%D0%BE%D0%B9%201.png?1552446598593",
+                  "sizes": "192x192" }]
+    }]
 }

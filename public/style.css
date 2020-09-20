@@ -41,7 +41,7 @@ section {
 }
 section h1 {
   font-size: 2.5em;
-  margin-bottom: 1em;
+  margin: 1em 0;
 }
 button {
   background: none;
@@ -270,6 +270,9 @@ footer a {
   display: table;
 }
 .date {
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   border: 3px solid #ffbc42;
   border-top-left-radius: 7px;
   border-bottom-left-radius: 7px;
@@ -279,9 +282,7 @@ footer a {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
+  transition: all .2s ease-out .05s;
 }
 .week-day {
   min-height: 146px;
@@ -297,12 +298,15 @@ footer a {
   background-color: #fff;
   border: 3px solid #ffbc42;
   border-radius: 7px;
+  max-height: 1000px;
   min-height: 136px;
   float: left;
   margin-left: 8px;
   margin-bottom: 8px;
+  overflow: hidden;
   padding: 8px;
   position: relative;
+  transition: all .25s ease-out;
   width: 12vw;
   min-width: 160px;
 }
@@ -670,6 +674,7 @@ a {
     height: calc(100% - 6px);
     margin: 0;
     padding: 0 12px 0 12px;
+    z-index: 3;
   }
   .date::after {
     content: " ";
@@ -698,10 +703,18 @@ a {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     margin: 8px 0 0 0;
+    max-height: 250px;
     min-height: 24px;
     padding: 8px 0 8px 8px;
     width: 95vw;
+    z-index: -2;
   }
+.collapsed {
+  margin-top: -10px;
+  min-height: 0px;
+  max-height: 0px;
+  padding: 0 0 0 8px;
+}
   .subject {
     position: relative;
     float: left;
@@ -759,6 +772,9 @@ a {
   .but {
     border: 3px solid #256697;
     color: rgba(255, 255, 255, 0.87);
+  }
+  option {
+    background: #181d22;
   }
   nav,
   #setting,

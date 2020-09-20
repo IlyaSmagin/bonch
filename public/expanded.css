@@ -1,0 +1,212 @@
+
+/* CONTENT */
+/* Safari 4.0 - 8.0 */
+@-webkit-keyframes mymove {
+  from {
+    opacity: 0;
+    -webkit-transform: translateY(20vh);
+    -ms-transform: translateY(20vh);
+    transform: translateY(20vh);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+    -ms-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+
+@keyframes mymove {
+  from {
+    opacity: 0;
+    -webkit-transform: translateY(20vh);
+    -ms-transform: translateY(20vh);
+    transform: translateY(20vh);
+  }
+  to {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+    -ms-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+.day:nth-child(0) {
+  animation-delay: 0s;
+}
+.day:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.day:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.day:nth-child(3) {
+  animation-delay: 0.15s;
+}
+.day:nth-child(4) {
+  animation-delay: 0.2s;
+}
+.day:nth-child(5) {
+  animation-delay: 0.25s;
+}
+.day::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+  .teachers-name {
+  }
+/* MOBILE */
+@media only screen and (max-width: 990px) {
+.day {
+  padding: 8px 0 0 8px;
+  width: calc(100vw - 215px);
+  min-height: 170px;
+  opacity: 0;
+  -webkit-animation: mymove 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Safari 4.0 - 8.0 */
+  animation: mymove 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation-fill-mode: forwards;
+}
+.date {
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  min-height: 160px;
+  width: 24px;
+  float: left;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  transition: all .2s ease-out .05s;
+}
+.week-day {
+  min-height: 146px;
+  -webkit-writing-mode: tb-rl;
+  -ms-writing-mode: tb-rl;
+  writing-mode: tb-rl;
+  -webkit-transform: rotate(-180deg);
+  -ms-transform: rotate(-180deg);
+  transform: rotate(-180deg);
+  text-align: center;
+}
+.lecture {
+  border-radius: 7px;
+  max-height: 1000px;
+  min-height: 124px;
+  float: left;
+  margin-left: 8px;
+  margin-bottom: 8px;
+  overflow: hidden;
+  padding: 8px;
+  position: relative;
+  transition: all .25s ease-out;
+  width: 12vw;
+  min-width: 160px;
+}
+.time {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  font-size: 14px;
+  font-weight: 400;
+  float: none;
+  margin-top: auto;
+}
+  .time span {
+    display: block;
+  }
+.type {
+  float: none;
+  font-size: 14px;
+  font-weight: 400;
+  padding: 2px 0 0 24px;
+}
+.number {
+ width: auto;
+}
+.subject {
+ float: none;
+  font-size: 15px;
+  padding: 8px 0 8px 0;
+    max-width: none;
+    margin-left: auto;
+  word-wrap: break-word;
+}
+.classrooms {
+  font-size: 15px;
+ float: none;
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  width: calc(35% - 8px);
+  white-space: pre-wrap;
+}
+.teachers-name {
+  font-size: 14px;
+  font-weight: 400;
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+ float: none;
+  width: calc(70% - 8px);
+  text-align: end;
+  white-space: pre-wrap;
+  max-width: none;
+}
+  .day {
+    padding-left: 0;
+    width: 100%;
+    min-height: 36px;
+  }
+  .date {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    border-bottom-left-radius: 0;
+    width: 95vw;
+    min-height: 36px;
+    height: calc(100% - 6px);
+    margin: 0;
+    padding: 0 12px 0 12px;
+    z-index: 3;
+  }
+  .date::after {
+    content: " ";
+    display: inline-block;
+    position: absolute;
+    right: 3vw;
+    top: 20px;
+    width: 36px;
+    height: 36px;
+    background: url("https://cdn.glitch.com/a7714135-9880-43b0-af1d-145b00d4f4da%2Fmore.svg?v=1570905521402")
+      no-repeat;
+  }
+  .week-day {
+    min-height: 20px;
+    -webkit-writing-mode: horizontal-tb;
+    -ms-writing-mode: lr-tb;
+    writing-mode: horizontal-tb;
+    -webkit-transform: rotate(0);
+    -ms-transform: rotate(0);
+    transform: rotate(0);
+    text-align: center;
+  }
+  .lecture {
+    border-radius: 7px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 8px 0 0 0;
+    width: 95vw;
+    z-index: -2;
+  }
+  .up-block {
+    width: auto;
+    float: none;
+  }
+.collapsed {
+  margin-top: -10px;
+  min-height: 0px;
+  max-height: 0px;
+  padding: 0 0 0 8px;
+}
+}
