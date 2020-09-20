@@ -1,3 +1,4 @@
+
 var date = new Date();//2019-08-31T19:50:00+03:00 saturday
 var thisWeek = Math.floor((Date.parse(date) - Date.parse("2020-08-22T19:50:00+03:00")) / 604800000);
 var curWeek = thisWeek;
@@ -14,7 +15,7 @@ function weekDate(Week) {
   date = date + (604800000 * (Week)); //1000 * 60 * 60 * 24 * 7
   date = new Date(date);
   var diff = date.getDate() - date.getDay() + 1;
-  var lastday = date.getDate() - (date.getDay()) + 7;
+  var lastday = date.getDate() - date.getDay() + 7;
   date.setDate(diff);
   var offset;
   date.getMonth() < 9 ? offset = ".0" : offset = ".";
@@ -34,7 +35,7 @@ function load_group() {
   var faculty = document.getElementById("faculty").value;
   if (kurs != 0 && faculty != 0) {
     var xhr = new XMLHttpRequest();
-    xhr.onload = function () {
+    xhr.onload = function() {
       if (xhr.status >= 200 && xhr.status < 300) {
         display_groups(JSON.parse(xhr.response));
       } else {
@@ -60,8 +61,15 @@ function load_group() {
         display_groups([{ "Загрузка": name }]);
       }
     };
-    var url = window.location.protocol + '//' + window.location.host + '/choose?kurs=' + kurs + '&faculty=' + faculty;
-    xhr.open('GET', url);
+    var url =
+      window.location.protocol +
+      "//" +
+      window.location.host +
+      "/choose?kurs=" +
+      kurs +
+      "&faculty=" +
+      faculty;
+    xhr.open("GET", url);
     xhr.send();
   }
 }
@@ -84,7 +92,7 @@ function load_schedule() {
   }
   if (group != 0) {
     var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function () {
+    xhr.onreadystatechange = function() {
       if (xhr.readyState === 1) {
       } else if (xhr.readyState === 4 && xhr.status === 200) {
         display_schedule(JSON.parse(xhr.response));
@@ -92,8 +100,17 @@ function load_schedule() {
         display_schedule(JSON.parse(xhr.response));
       }
     };
-    var url = window.location.protocol + '//' + window.location.host + '/schedule?kurs=' + kurs + '&faculty=' + faculty + '&group=' + group;
-    xhr.open('GET', url);
+    var url =
+      window.location.protocol +
+      "//" +
+      window.location.host +
+      "/schedule?kurs=" +
+      kurs +
+      "&faculty=" +
+      faculty +
+      "&group=" +
+      group;
+    xhr.open("GET", url);
     xhr.send();
     var welcomeForm = document.getElementById("welcome-form");
     if (window.matchMedia("(max-width: 1160px)").matches) {
@@ -111,7 +128,9 @@ function load_schedule() {
 
 function display_groups(data) {
   var adr = document.getElementById("groups");
-  while (adr.firstChild) { adr.removeChild(adr.firstChild); }
+  while (adr.firstChild) {
+    adr.removeChild(adr.firstChild);
+  }
   for (var i = 0; i < data.length; i++) {
     var option = document.createElement("option");
     var groupKey = Object.keys(data[i]);
@@ -153,6 +172,7 @@ function display_schedule(data) {
         }
 
         start === 0 ? start = data[d][i].number : end = data[d][i].number;
+
         total++;
       }
     }
@@ -166,9 +186,11 @@ function display_schedule(data) {
       for (var i = 0; i < total; i++) {
         last.getElementsByClassName("lecture")[i].style.height = (maxHeight + mar) + 'px';
       }
-      last.getElementsByClassName("date")[0].style.height = (maxHeight + mar + 16) + 'px';
+      last.getElementsByClassName("date")[0].style.height =
+        maxHeight + mar + 16 + "px";
     }
   }
+
 
   var dateDay = new Date(2020, 7, 24 + (curWeek) * 7, 19, 50, 0);//2019-09-2T19:50:00+03:00 monday
   var weekDay = document.getElementsByClassName("week-day");
@@ -188,7 +210,6 @@ function showDay(el) {
 
   if (mobile) {
     for (var i = 0; i < list.length; i++) {
-
       if (list[i].className == 'lecture collapsed') {
         list[i].classList.remove('collapsed');
         da[0].style = null;
@@ -228,17 +249,22 @@ function showChoose() {
       modal.classList.remove("show");
       head.style.transform = "translateY(0)";
       head.style.webkitTransform = "translateY(0)";
-      btn.innerHTML = localStorage.getItem('groupName');
+      btn.innerHTML = localStorage.getItem("groupName");
     }
   } else {
     var span = document.getElementsByClassName("close")[0];
     span.onclick = function () {
       modal.style.display = "none";
-    }
-    window.onclick = function (event) {
+    };
+    window.onclick = function(event) {
       if (event.target === modal) {
         modal.style.display = "none";
       }
+    };
+    if (modal.style.display === "block") {
+      modal.style.display = "none";
+    } else {
+      modal.style.display = "block";
     }
     if (modal.style.display === "block") {
       modal.style.display = "none";
@@ -258,13 +284,13 @@ function showChoose() {
 }
 
 let deferredPrompt;
-const addBtn = document.getElementById('add');
-window.addEventListener('beforeinstallprompt', (e) => {
+const addBtn = document.getElementById("add");
+window.addEventListener("beforeinstallprompt", e => {
   e.preventDefault();
   deferredPrompt = e;
-  addBtn.addEventListener('click', (e) => {
+  addBtn.addEventListener("click", e => {
     deferredPrompt.prompt();
-    deferredPrompt.userChoice.then((choiceResult) => {
+    deferredPrompt.userChoice.then(choiceResult => {
       deferredPrompt = null;
     });
   });
@@ -272,10 +298,13 @@ window.addEventListener('beforeinstallprompt', (e) => {
 
 function load_exams() {
   var kurs, faculty, group;
-  if (document.getElementById("groups").value === '0' && localStorage.getItem("groupName") != null) {
-    group = localStorage.getItem('group');
-    kurs = localStorage.getItem('kurs');
-    faculty = localStorage.getItem('faculty');
+  if (
+    document.getElementById("groups").value === "0" &&
+    localStorage.getItem("groupName") != null
+  ) {
+    group = localStorage.getItem("group");
+    kurs = localStorage.getItem("kurs");
+    faculty = localStorage.getItem("faculty");
   } else {
     kurs = document.getElementById("kurs").value;
     group = document.getElementById("groups").value;
@@ -283,11 +312,16 @@ function load_exams() {
     localStorage.setItem("kurs", kurs);
     localStorage.setItem("faculty", faculty);
     localStorage.setItem("group", group);
-    localStorage.setItem("groupName", document.getElementById("groups")[document.getElementById("groups").selectedIndex].textContent);
+    localStorage.setItem(
+      "groupName",
+      document.getElementById("groups")[
+        document.getElementById("groups").selectedIndex
+      ].textContent
+    );
   }
   if (group != 0) {
     var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function () {
+    xhr.onreadystatechange = function() {
       if (xhr.readyState === 1) {
       } else if (xhr.readyState === 4 && xhr.status === 200) {
         display_exams(JSON.parse(xhr.response));
@@ -295,17 +329,30 @@ function load_exams() {
         display_exams(JSON.parse(xhr.response));
       }
     };
-    var url = window.location.protocol + '//' + window.location.host + '/exam?kurs=' + kurs + '&faculty=' + faculty + '&group=' + group;
-    xhr.open('GET', url);
+    var url =
+      window.location.protocol +
+      "//" +
+      window.location.host +
+      "/exam?kurs=" +
+      kurs +
+      "&faculty=" +
+      faculty +
+      "&group=" +
+      group;
+    xhr.open("GET", url);
     xhr.send();
     if (window.matchMedia("(max-width: 1200px)").matches) {
       document.getElementById("welcome-form").classList.remove("show");
-      document.getElementsByClassName("bg")[0].style.transform = "translateY(0)";
-      document.getElementsByClassName("bg")[0].style.webkitTransform = "translateY(0)";
+      document.getElementsByClassName("bg")[0].style.transform =
+        "translateY(0)";
+      document.getElementsByClassName("bg")[0].style.webkitTransform =
+        "translateY(0)";
     } else {
       document.getElementById("welcome-form").style.display = "none";
     }
-    document.getElementById("change-group").innerHTML = localStorage.getItem('groupName');
+    document.getElementById("change-group").innerHTML = localStorage.getItem(
+      "groupName"
+    );
   }
 }
 function display_exams(data) {
@@ -326,30 +373,72 @@ function display_exams(data) {
     for (var i = 0; i < 1; i++) {
       last.innerHTML += lecture;
       last.lastChild.getElementsByClassName("type")[0].innerHTML = data[d].type;
-      last.lastChild.getElementsByClassName("subject")[0].innerHTML = data[d].class;
-      last.lastChild.getElementsByClassName("classrooms")[0].innerHTML = data[d].cabinet;
-      last.lastChild.getElementsByClassName("teachers-name")[0].innerHTML = data[d].teacher;
+      last.lastChild.getElementsByClassName("subject")[0].innerHTML =
+        data[d].class;
+      last.lastChild.getElementsByClassName("classrooms")[0].innerHTML =
+        data[d].cabinet;
+      last.lastChild.getElementsByClassName("teachers-name")[0].innerHTML =
+        data[d].teacher;
       last.lastChild.getElementsByClassName("time")[0].innerHTML = data[d].time;
-      last.firstChild.getElementsByClassName("week-day")[0].innerHTML = data[d].weeks;
-      if (parseInt(window.getComputedStyle(last.getElementsByClassName("subject")[0]).height) + Math.max(parseInt(window.getComputedStyle(last.getElementsByClassName("classrooms")[0]).height), parseInt(window.getComputedStyle(last.getElementsByClassName("teachers-name")[0]).height)) > maxHeight) {
-        maxHeight = parseInt(window.getComputedStyle(last.getElementsByClassName("subject")[0]).height) + Math.max(parseInt(window.getComputedStyle(last.getElementsByClassName("classrooms")[0]).height), parseInt(window.getComputedStyle(last.getElementsByClassName("teachers-name")[0]).height));
+      last.firstChild.getElementsByClassName("week-day")[0].innerHTML =
+        data[d].weeks;
+      if (
+        parseInt(
+          window.getComputedStyle(last.getElementsByClassName("subject")[0])
+            .height
+        ) +
+          Math.max(
+            parseInt(
+              window.getComputedStyle(
+                last.getElementsByClassName("classrooms")[0]
+              ).height
+            ),
+            parseInt(
+              window.getComputedStyle(
+                last.getElementsByClassName("teachers-name")[0]
+              ).height
+            )
+          ) >
+        maxHeight
+      ) {
+        maxHeight =
+          parseInt(
+            window.getComputedStyle(last.getElementsByClassName("subject")[0])
+              .height
+          ) +
+          Math.max(
+            parseInt(
+              window.getComputedStyle(
+                last.getElementsByClassName("classrooms")[0]
+              ).height
+            ),
+            parseInt(
+              window.getComputedStyle(
+                last.getElementsByClassName("teachers-name")[0]
+              ).height
+            )
+          );
       }
-
     }
     if (mobile) {
       last.getElementsByClassName("date")[0].style.borderRadius = "7px";
     } else if (p) {
       maxHeight = 0;
       for (var f = 1; f < last.childNodes.length; f++) {
-        maxHeight += parseInt(window.getComputedStyle(last.getElementsByClassName("lecture")[f - 1]).height);
+        maxHeight += parseInt(
+          window.getComputedStyle(last.getElementsByClassName("lecture")[f - 1])
+            .height
+        );
       }
-      last.style.height = maxHeight + 'px';
+      last.style.height = maxHeight + "px";
     } else {
       var mar = 104;
       for (var i = 0; i < 1; i++) {
-        last.getElementsByClassName("lecture")[i].style.height = (maxHeight + mar) + 'px';
+        last.getElementsByClassName("lecture")[i].style.height =
+          maxHeight + mar + "px";
       }
-      last.getElementsByClassName("date")[0].style.height = (maxHeight + mar + 24) + 'px';
+      last.getElementsByClassName("date")[0].style.height =
+        maxHeight + mar + 24 + "px";
     }
   }
 }
