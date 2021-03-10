@@ -171,7 +171,7 @@ function display_schedule(data) {
     "13:30-15:00",
     "15:00-16:30",
     "16:30-18:05",
-    "18:15-19:50"
+    "18:15-19:50",
   ];
   var mobile = window.matchMedia("(max-width: 990px)").matches;
   var lecture =
@@ -206,6 +206,7 @@ function display_schedule(data) {
             parseInt(window.getComputedStyle(last.getElementsByClassName("teachers-name")[total]).height));
         }
         start === 0 ? (start = data[d][i].number) : (end = data[d][i].number);
+
         total++;
       }
     }
@@ -347,8 +348,22 @@ function showChoose() {
     } else {
       modal.style.display = "block";
     }
+    if (modal.style.display === "block") {
+      modal.style.display = "none";
+    } else {
+      modal.style.display = "block";
+    }
   }
   //
+  var kurs = (document.getElementById(
+    "kurs"
+  ).selectedIndex = localStorage.getItem("kurs"));
+  var faculty = document.getElementById("faculty");
+  for (var x = 0; x < faculty.length - 1; x++) {
+    if (localStorage.getItem("faculty") == faculty.options[x].value) {
+      faculty.selectedIndex = x;
+    }
+  }  //
   var kurs = (document.getElementById(
     "kurs"
   ).selectedIndex = localStorage.getItem("kurs"));
