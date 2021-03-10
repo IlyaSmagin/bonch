@@ -282,7 +282,7 @@ footer a {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  transition: all .2s ease-out .05s;
+  transition: all 0.2s ease-out 0.05s;
 }
 .week-day {
   min-height: 146px;
@@ -306,7 +306,7 @@ footer a {
   overflow: hidden;
   padding: 8px;
   position: relative;
-  transition: all .25s ease-out;
+  transition: all 0.25s ease-out;
   width: 12vw;
   min-width: 160px;
 }
@@ -316,6 +316,7 @@ footer a {
   top: 8px;
   font-size: 14px;
   font-weight: 400;
+  text-align: end;
 }
 .type {
   font-size: 14px;
@@ -709,12 +710,12 @@ a {
     width: 95vw;
     z-index: -2;
   }
-.collapsed {
-  margin-top: -10px;
-  min-height: 0px;
-  max-height: 0px;
-  padding: 0 0 0 8px;
-}
+  .collapsed {
+    margin-top: -10px;
+    min-height: 0px;
+    max-height: 0px;
+    padding: 0 0 0 8px;
+  }
   .subject {
     position: relative;
     float: left;
