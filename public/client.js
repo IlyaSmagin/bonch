@@ -1,6 +1,6 @@
 var date = new Date(); //2019-08-31T19:50:00+03:00 saturday
 var thisWeek = Math.floor(
-  (Date.parse(date) - Date.parse("2020-08-22T19:50:00+03:00")) / 604800000
+  (Date.parse(date) - Date.parse("2021-02-02T19:50:00+03:00")) / 604800000
 );
 var curWeek = thisWeek;
 var options = {
@@ -24,7 +24,7 @@ document.getElementById("thisWeek").innerHTML = curWeek + " ";
 weekDate(thisWeek);
 
 function weekDate(Week) {
-  var date = Date.parse("2020-08-24T00:00:00+03:00");
+  var date = Date.parse("2021-02-01T00:00:00+03:00");
   date = date + 604800000 * Week; //1000 * 60 * 60 * 24 * 7
   date = new Date(date);
   var diff = date.getDate() - date.getDay() + 1;
@@ -164,6 +164,7 @@ function display_schedule(data) {
     "14:45-16:20",
     "16:30-18:05",
     "18:15-19:50",
+    "20:00-21:35",
     "9:00-10:30",
     "10:30-12:00",
     "12:00-13:30",
@@ -184,59 +185,26 @@ function display_schedule(data) {
     var last = document.getElementsByClassName("day")[d];
     var maxHeight = 0;
     for (var i = 0, start = 0, end = 0, total = 0; i < data[d].length; i++) {
-      if (data[d][i].weeks.search(" " + curWeek + ",") !== -1) {
+      if (data[d][i].weeks.search(" " + curWeek) !== -1) {
         last.innerHTML += lecture;
         last.getElementsByClassName("number")[total].innerHTML = data[d][i].number;
         last.getElementsByClassName("type")[total].innerHTML = data[d][i].type;
         last.getElementsByClassName("subject")[total].innerHTML = data[d][i].class;
         last.getElementsByClassName("classrooms")[total].innerHTML = data[d][i].cabinet;
         last.getElementsByClassName("teachers-name")[total].innerHTML = data[d][i].teacher;
-        last.getElementsByClassName("time")[total].innerHTML = data[d][
-          i
-        ].cabinet.startsWith("С")
-          ? times[data[d][i].number + 5]
-          : times[data[d][i].number - 1];
+        last.getElementsByClassName("time")[total].innerHTML =
+          data[d][i].cabinet.startsWith("С")
+          ? times[data[d][i].number + 6] : (times[data[d][i].number - 1]) ? times[data[d][i].number - 1]: "";
 
-        if (
-          parseInt(
-            window.getComputedStyle(
-              last.getElementsByClassName("subject")[total]
-            ).height
-          ) +
-          Math.max(
-            parseInt(
-              window.getComputedStyle(
-                last.getElementsByClassName("classrooms")[total]
-              ).height
-            ),
-            parseInt(
-              window.getComputedStyle(
-                last.getElementsByClassName("teachers-name")[total]
-              ).height
-            )
-          ) >
-          maxHeight
-        ) {
-          maxHeight =
-            parseInt(
-              window.getComputedStyle(
-                last.getElementsByClassName("subject")[total]
-              ).height
-            ) +
-            Math.max(
-              parseInt(
-                window.getComputedStyle(
-                  last.getElementsByClassName("classrooms")[total]
-                ).height
-              ),
-              parseInt(
-                window.getComputedStyle(
-                  last.getElementsByClassName("teachers-name")[total]
-                ).height
-              )
-            );
+        if (parseInt(window.getComputedStyle(last.getElementsByClassName("subject")[total]).height) 
+          + Math.max(
+            parseInt(window.getComputedStyle(last.getElementsByClassName("classrooms")[total]).height),
+            parseInt(window.getComputedStyle(last.getElementsByClassName("teachers-name")[total]).height)) > maxHeight ) {
+          maxHeight = parseInt(window.getComputedStyle(last.getElementsByClassName("subject")[total]).height)
+            + Math.max(
+            parseInt(window.getComputedStyle(last.getElementsByClassName("classrooms")[total]).height),
+            parseInt(window.getComputedStyle(last.getElementsByClassName("teachers-name")[total]).height));
         }
-
         start === 0 ? (start = data[d][i].number) : (end = data[d][i].number);
 
         total++;
@@ -264,7 +232,7 @@ function display_schedule(data) {
     }
   }
 
-  var dateDay = new Date(2020, 7, 24 + curWeek * 7, 19, 50, 0); //2019-09-2T19:50:00+03:00 monday
+  var dateDay = new Date(2021, 1, 1 + curWeek * 7, 19, 50, 0); //2019-09-2T19:50:00+03:00 monday
   var weekDay = document.getElementsByClassName("week-day");
   for (var juk = 0; juk < 6; juk++) {
     var offset = dateDay.getMonth() < 9 ? ".0" : ".";
@@ -281,24 +249,36 @@ function display_schedule(data) {
     curWeek === thisWeek && mobile && today > dateDay.getTime()
       ? document.getElementsByClassName("date")[juk].click()
       : 0;
-    if (dateDay.getDate() == today.getDate()) {
+    if (dateDay.getDate() == today.getDate() && localStorage.getItem("layout") == "expanded") {
       var lectureTimes = document
         .getElementsByClassName("day")
       [juk].getElementsByClassName("time");
       for (var i = 0; i < lectureTimes.length; i++) {
-        var timeCountdown = new Date(
-          2020,
-          dateDay.getMonth(),
-          dateDay.getDate(),
+        var timeCountdown = new Date( 2020, dateDay.getMonth(), dateDay.getDate(),
           parseInt(lectureTimes[i].innerHTML.slice(6, 8)),
           parseInt(lectureTimes[i].innerHTML.slice(9, 11))
         );
         var distance = timeCountdown - today;
         if (distance > 0 && distance < 5700000) {
+          var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          hours > 0 ? hours = hours + "ч " : hours = "";
           lectureTimes[i].innerHTML +=
-            "<br>" +
+            "<br>" + hours +
             Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)) +
-            " минут до конца";
+            "мин";
+        }
+        var timeCountdown = new Date( 2020, dateDay.getMonth(), dateDay.getDate(),
+          parseInt(lectureTimes[i].innerHTML.slice(0, 2)),
+          parseInt(lectureTimes[i].innerHTML.slice(3, 5))
+        );
+        var distance = timeCountdown - today;
+        if(distance > 0 && i == 0){
+          var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          hours > 0 ? hours = hours + "ч " : hours = "";
+          lectureTimes[i].innerHTML +=
+            "<br>через " + hours +
+            Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)) +
+            "мин";
         }
       }
     }
@@ -330,10 +310,10 @@ function showDay(el) {
 function changeWeek(a) {
   if ((curWeek >= 1 || a >= 0) && (a <= 0 || curWeek < 18)) {
     curWeek += a;
+  }
     document.getElementById("thisWeek").innerHTML = curWeek + " ";
     weekDate(curWeek);
     load_schedule();
-  }
 }
 
 function showChoose() {
@@ -375,6 +355,15 @@ function showChoose() {
     }
   }
   //
+  var kurs = (document.getElementById(
+    "kurs"
+  ).selectedIndex = localStorage.getItem("kurs"));
+  var faculty = document.getElementById("faculty");
+  for (var x = 0; x < faculty.length - 1; x++) {
+    if (localStorage.getItem("faculty") == faculty.options[x].value) {
+      faculty.selectedIndex = x;
+    }
+  }  //
   var kurs = (document.getElementById(
     "kurs"
   ).selectedIndex = localStorage.getItem("kurs"));

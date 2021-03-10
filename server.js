@@ -51,6 +51,7 @@ app.get('/choose', function (req, res) {
   res.send(groups);
 });
 //https://cabinet.sut.ru/raspisanie_all_new?schet=205.1819/2&type_z=1&faculty=50029&kurs=1&group=53768
+//schet=205.2021/2&type_z=1&faculty=50029&kurs=3&group=53768
 //https://cabinet.sut.ru/raspisanie_all_new?type_z=1
 app.get('/schedule', function (req, res) {
   var schedule = [];
@@ -58,7 +59,7 @@ app.get('/schedule', function (req, res) {
   var faculty = req.query.faculty;
   var group = req.query.group;
   //console.log(kurs +" " +faculty+ " "+group);
-  var url = 'http://cabinet.sut.ru/raspisanie_all_new?type_z=1&faculty=' + faculty + "&kurs=" + kurs + "&group=" + group;
+  var url = 'http://cabinet.sut.ru/raspisanie_all_new?schet=205.2021/2&type_z=1&faculty=' + faculty + "&kurs=" + kurs + "&group=" + group;
   //console.log(url);
   request(url, function (error, response, html) {
     if (!error) {
@@ -72,7 +73,7 @@ app.get('/schedule', function (req, res) {
           $("#rightpanel tr td .pair[weekday^=" + i + "]").each(function (index, element) {
             var num = $(this).attr('pair');
             var clas = $('strong', this).text().replace('Элективные дисциплины по физической культуре и спорту', 'Физическая культура и спорт');
-            var wek = $('.weeks', this).text().replace('н', ',').replace(/\(|\)/g, " ");
+            var wek = $('.weeks', this).text().replace('н', ',').replace(/\(|\)|\*/g, "");
             num > 80 ? num -= 82 : num -= 1;
             //console.log(pairs.length, pairs.length > 0 ? pairs[pairs.length-1].number : 0);
             if (pairs.length > 0 && num === pairs[pairs.length - 1].number && clas === pairs[pairs.length - 1].class && pairs[pairs.length - 1].weeks === wek) {
@@ -157,5 +158,5 @@ app.get('*', function (req, res) {
   res.redirect('/');
 });
 const listener = app.listen(process.env.PORT, function () {
-  console.log('Ты сел на ' + listener.address().port + ' порт');
+  console.log('Сервер запущен на ' + listener.address().port + ' порту');
 });
